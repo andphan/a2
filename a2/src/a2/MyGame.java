@@ -23,6 +23,7 @@ import net.java.games.input.*;
 
 public class MyGame extends BaseGame implements IEventListener{
 	// what type of objects are in the game
+	CameraOrbit oc;
 	Rectangle rect1;
 	Sphere sph;
 	Cylinder cyl;
@@ -36,6 +37,8 @@ public class MyGame extends BaseGame implements IEventListener{
 	private int score = 0;
 	private HUDString scoreDisplay;
 	private HUDString timeDisplay;
+	private String kbName;
+	private String gpName;
 	private float time = 0;
 	int crashInc = 0;
 	
@@ -46,9 +49,11 @@ public class MyGame extends BaseGame implements IEventListener{
 			// initialize Managers
 			System.out.println("initGame call");
 			initGameObjects();	
+			
+			oc = new CameraOrbit(camera, myT, im, gpName);
 
-			String kbName = im.getKeyboardName();
-			String gpName = im.getFirstGamepadName();
+			kbName = im.getKeyboardName();
+			gpName = im.getFirstGamepadName();
 			
 			// create keyboard actions
 			MovementToggle movement = new MovementToggle();
@@ -72,35 +77,35 @@ public class MyGame extends BaseGame implements IEventListener{
 			/* figure out why laptop cannot run with im.associateAction */
 			
 			// Associate actions with keyboard
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.W, moveForward, 
-					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.S, moveBackward, 
-					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);			
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.A, moveLeft, 
-					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.D, moveRight, 
-					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.LEFT, rotateLeft, 
-					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.RIGHT, rotateRight, 
-				IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.UP, rotateUp, 
-					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.DOWN, rotateDown, 
-					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.ESCAPE, quitGame, 
-					IInputManager.INPUT_ACTION_TYPE.ON_PRESS_ONLY);
+		//	im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.W, moveForward, 
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		//	im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.S, moveBackward, 
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);			
+		//	im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.A, moveLeft, 
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
+		//	im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.D, moveRight, 
+		//			.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
+		//	im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.LEFT, rotateLeft, 
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
+		//	im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.RIGHT, rotateRight, 
+		//		IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
+		//	im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.UP, rotateUp, 
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
+		//	im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.DOWN, rotateDown, 
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
+		//	im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.ESCAPE, quitGame, 
+		//			.INPUT_ACTION_TYPE.ON_PRESS_ONLY);
 			
 			
 			// associate actions with controllers
-			im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.RY, controllerRY,
-					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-			im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.RX, controllerRX,
-					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-			im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.X, controllerX,
-					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-			im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.Y, controllerY,
-					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		//.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.RY, controllerRY,
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		//	im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.RX, controllerRX,
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		//	im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.X, controllerX,
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		//	im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.Y, controllerY,
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
 		}
 			
 		public void initGameObjects()
@@ -208,6 +213,7 @@ public class MyGame extends BaseGame implements IEventListener{
 			// update score
 			scoreDisplay.setText("Score = " + score);
 			time += elapsedTimeMS;
+			oc.update(elapsedTimeMS);
 			
 			timeDisplay.setText("Time = " + (time/1000));
 
