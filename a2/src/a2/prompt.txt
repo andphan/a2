@@ -1,240 +1,125 @@
-current list - 
- At least the following controller mappings must be provided (you can add more if you like):
+What to fix from assignment 1
 
- X-axis: move camera left and right in the same manner as the A and S keys.
-
- Y-axis: move camera forward and backward in the same manner as the W and D keys.
-
- RX-axis: yaw camera around its V axis, the same as the Left/Right arrow keys.
-
- RY-axis: pitch camera around its U axis, the same as the Up/Down arrow keys.
-
-100%
-
- One of the objects placed in the game is the “Treasure Chest”. The treasure chest should look
-like a simple box – you can either define your own, or use a SAGE Cube. Whenever you collect a
-treasure, the size of the treasure chest should increase. To trigger this happening, you will need to
-use SAGE’s event handling system. That means (1) creating an event class that extends
-AbstractGameEvent, (2) associating your event type with an IEventListener – such as the treasure
-chest, (3) detecting collisions between the camera and game objects, (4) triggering an event when
-a collision is detected, and (5) handling the collision in the listener by increasing the size of the
-treasure chest. You may place the treasure chest in the world wherever you want.
-
-did 1, 2, 3, 4
-
-// how to increase the size of the trimesh.
-// how to get the trimesh prompt
-
-(1) creating an event class that extends AbstractGameEvent, 
-(2) associating your event type with an IEventListener – such as the treasure chest,
-(3) detecting collisions between the camera and game objects, 
-(4) triggering an event when a collision is detected, and 
-(5) handling the collision in the listener by increasing the size of thetreasure chest.
-
-No listeners found for this event: Default Event Name
-cylinder hit
-removing cylinder object.
+camera movement
+event handler
+spawn locations
 
 
 
 
-1
-CSc 165 – Computer Game Architecture and Implementation Spring 2015 - Gordon
-Assignment #1: Building A Game Using Game Engine Components
-Due: Tuesday, February 24th (3 weeks)
-The objective of this assignment is to learn how to use game engine components to build a simple 3D
-game. You are to rely on existing game engine components to supply much of the underlying
-functionality while implementing some of the functionality yourself. The assignment assumes you will
-use the Simple Adaptable Game Engine (SAGE) provided to the class.
-The game to be implemented is called “Treasure Hunt 2015”. The player uses the keyboard and
-gamepad (Xbox controller or similar) to fly around a 3D world collecting “treasures”. A treasure is
-“collected” (and removed from the game) when the player flys into it (i.e., when the camera collides
-with a treasure). As treasures are collected, a “Treasure Chest” (also displayed in the world) grows.
-The game score and elapsed time is shown on a HUD (Heads-Up Display).
-Game Program Requirements
- Your game must extend sage.app.BaseGame, and override initGame() and update().
-All game logic must reside inside these methods, or in user-written classes invoked by them.
-
-100%
-
- You must use sage.scene.shape objects to build some of the treasures. The game initialization
-code should instantiate several such objects of different types, randomly positioned in the world.
-You may need to use scale() to set the sizes of the objects as desired.
-
-100%
-
- At least one of the treasures must be a new one that is defined completely by you, in a class that
-extends sage.scene.TriMesh. You will need to explicitly specify the vertices, colors, and
-triangles as needed to construct your object. Don’t just copy one from class notes.
-
-100% - need to make the trimesh look normal
 
 
- Your game must support input actions handled by Action classes. That is, you must write classes
-that implement sage.input.action.IAction, and your game must then utilize
-InputManager.associateAction() to link device components with your Action classes.
+Assignment #2: Multi-Player Games with 3P Cameras
+Due: Friday, March 13
+th (2½ weeks)
+The objective of this assignment is to learn about third-person cameras, display systems, and
+multi-player “split-screen” games, by upgrading your “Treasure Hunt 2015” game from A1, such
+that it that meets additional requirements described below. Your game will now provide each of
+two players with their own viewport (on a shared screen). Each player has their own avatar, and
+separate controls for third-person cameras. The “game world” consists of the treasures as
+before, but also a flat ground plane (e.g. the Y=0 plane) on which reside the treasures, the
+treasure chest, and on which each player manipulates his/her avatar. The game must also
+provide two HUD elements showing relevant game data for each player.
 
-100%
-
-
- At least the following key mappings must be provided (you can can add more if you like):
-
- A/D/W/S: move camera left/right/forward/backward. Note that all camera motion is relative to
-the camera’s UVN axes; for example “W” moves in the direction of the camera’s N axis.
-100%
-if it's okay to use the professor's code
-
- Left-arrow / Right-arrow: rotate the camera (positive or negative) around its V axis (“yaw”).
-100%
- Up-arrow / Down-arrow: rotate the camera (positive or negative) around its U axis (“pitch”).
-100%
- ESCAPE: quit the game.
-100%
- At least the following controller mappings must be provided (you can add more if you like):
-
- X-axis: move camera left and right in the same manner as the A and S keys.
-
-100%
-
- Y-axis: move camera forward and backward in the same manner as the W and D keys.
-100%
- RX-axis: yaw camera around its V axis, the same as the Left/Right arrow keys.
-
-100%
-
- RY-axis: pitch camera around its U axis, the same as the Up/Down arrow keys.
-
-100%
-
- The game must display world axes showing where the world origin is located. The X axis should
-be red, the Y axis green, and the Z axis blue. You may add an input command to toggle the axes
-off/on, but this is not required (if you do, the axes must initially be visible).2
-
-100%  - used the professor's notes
-
- The game must include at least two HUD elements: current “score”, and elapsed time in seconds.
-Each HUD element must be implemented in a class that extends sage.scene.HUDObject. You
-may use sage.scene.HUDString (which extends HUDObject) to do this, or you may create
-your own class extending HUDObject. You can decide on a scoring method - a simple one is to
-count the number of treasures collected, but you could also include other factors, such as speed.
-
-100%
-
- One of the objects placed in the game is the “Treasure Chest”. The treasure chest should look
-like a simple box – you can either define your own, or use a SAGE Cube. Whenever you collect a
-treasure, the size of the treasure chest should increase. To trigger this happening, you will need to
-use SAGE’s event handling system. That means (1) creating an event class that extends
-AbstractGameEvent, (2) associating your event type with an IEventListener – such as the treasure
-chest, (3) detecting collisions between the camera and game objects, (4) triggering an event when
-a collision is detected, and (5) handling the collision in the listener by increasing the size of the
-treasure chest. You may place the treasure chest in the world wherever you want.
-
-did 1, 2, 3, 4
-
-// how to increase the size of the trimesh.
-// how to get the trimesh prompt
-
-(1) creating an event class that extends AbstractGameEvent, 
-(2) associating your event type with an IEventListener – such as the treasure chest,
-(3) detecting collisions between the camera and game objects, 
-(4) triggering an event when a collision is detected, and 
-(5) handling the collision in the listener by increasing the size of thetreasure chest.
-
-No listeners found for this event: Default Event Name
-cylinder hit
-removing cylinder object.
-
- The game must set the window title. BaseGame provides a simple way of accessing this.
-100%
-
-Coding Style Requirements
+0%
 
 
- Your code should be organized using Java packages. As the semester progresses, you will be
-developing two sets of code: code for different games, and game engine routines which will
-replace corresponding SAGE routines. Therefore you will need at least two packages: one named
-games which houses different games you develop, and one named (say) myGameEngine which
-houses game engine components which you develop to replace SAGE routines.
-Since you will be developing several games and multiple game engine components during the
-semester, you should use subpackages in your games and gameEngine packages to house
-various related elements. For example, classes which are part of the Treasure Hunt game itself
-would go in package games.treasurehunt2014 while classes which are part of your game
-engine (for example, classes which implement camera controller code, such as
-MoveForwardAction) would go in a package like myGameEngine.input.action. Your code
-should follow the Java convention that package names always start with a lower-case letter.
- Your program must run correctly when invoked from a command prompt using the command
-java a1.Starter. This means your Starter class must be contained in a package named
-“a1” and that it must contain the required public static void main(String [] args).
-The Starter code in package a1 must simply import the game code from the separate games.xxx
-package and execute it by invoking its start() method.
+As before, you are welcome to add features of your own, in addition to the basic requirements,
+as long as your program complies with the implementation details described below. And again,
+your game’s features must be clearly described in a “Player’s Guide” that you also submit.
+Game Requirements
 
 
-will do when finished
+ Implement a 3rd-person Camera Controller, either a chase camera or an orbit camera. It
+may be simplest to implement an orbit camera, since we went over that in class in fair detail.
+If you implement an orbit camera it must provide facilities for orbiting the camera both with
+and without altering the avatar’s heading, and for zooming the camera in and out on the
+avatar’s location. If you prefer to implement a chase camera, it must include some sort of
+“spring system” so that it moves smoothly behind the avatar when the player changes
+direction (implementing a spring system would require you to do some additional research).
+ Support split-screen multi-player viewports. Each of the (two) players must be presented
+with their own view of the (same) world which changes as they move their cameras.
+
+
+0%
+
+ Provide HUDs for each player, each displaying data relevant only to that player.
+
+25%
+
+
+ Include a ground plane - flat surface on which the game takes place. You may if you wish
+allow players to leave the ground for a time (“jumping”), but they should not have the ability
+to move continuously in arbitrary 3D directions like they did in A1. Applying scale() and
+rotate() to a SAGE scene.shape.Rectangle is an easy way to define a ground plane.
+
+
+
+
+ Use at least two different types of SceneNode controllers written by you. For example you
+could have one type of node controller which causes world objects to spin or bounce (or
+something similar), and gets instantiated and applied to one set of world objects, and a
+second type of node controller which causes objects to change color or to disappear after a
+certain amount of time. The specifics are up to you, but they must be implemented by you
+(and should extend the Sage scene.Controller class). You may also use built-in SAGE
+controllers, as long as you also include two controller types of your own implementation.
+
+
+
+ Provide support for two input controllers. For example, one player might use the keyboard
+and mouse while the second would use a gamepad. Or, your game could utilize two
+gamepads so that players have equivalent equipment. Either approach is acceptable, but
+be sure and document your implementation in your Player’s Guide.
+
+two controllers let's go with that.
+
+ Your game must include at least one instance of sage.scene.Group, containing some
+set of scenenode objects in your game. It may, for example, contain the treasures, or some
+subset of the treasures, or some other group of objects. Whatever group you choose to
+associate with the Group object, there must be at least one transform applied to the group.
+For example, you could apply some translation to the group during update(). Or, you could
+attach a node controller to the group. The main purpose of this requirement is for you to get
+some practice working with the basic scenegraph operations.
+
+
+0%
+
+ Provide your own implementation of IDisplaySystem. As before, your game should be
+defined by extending sage.app.BaseGame and overriding methods initGame() and
+update(). Now, however, your program should also override initSystem()and
+render() so that these functions are also provided by code written by you. You are
+welcome to follow the outline given in the course notes and sample code handout.
+(Note that overriding render() is not the same thing as implementing a Renderer; you may
+use the JOGLRenderer implementation in the creation of your IDisplaySystem)
+
+0%
+
+ Your game must run in FSEM (Full-Screen Exclusive Mode), or provide an FSEM option.
+
+0%
+
+ As before, your treasure chest should respond to Events using the SAGE event handler.
+
+
+0%
 
 Additional Notes
-
-
- This assignment requires you to develop input actions, some of which are camera control actions.
-SAGE has a variety of IAction implementations for camera controls (you can find them in
-sage.input.action). You may find it useful to use the SAGE version to test your program --
-but you must submit the completed program using YOUR implementations, not those in SAGE.
- If you do not have a controller that implements the X, Y, RX, and RY axes you may check one out
-from the instructor for a short time for testing purposes.
-
-50%
-
-
- You may use SAGE’s InputManager class; you do not have to write your own input manager.3
-
-100%
-
- The default Input Manager provided by BaseGame polls the underlying JInput event queues
-once each time around the game loop. Depending on the speed of your machine, the elapsed
-time parameter passed to the performAction() method of IAction objects will typically be in
-the range of 2-10 milliseconds, depending on your machine. The default SAGE IAction objects
-for camera manipulation (which you won’t use in this project, because you are building your own
-camera manipulation action objects) multiply this time value by the action speed (specified when
-the IAction is constructed) in order to determine camera move distance. Your code should take
-a similar approach. See the code example distributed in class.
-
-100%
-
- “Treasures” are “collected” by running into them with the camera. This means you must do
-collision detection between the camera location and the bounding volumes of the treasure shapes.
-SAGE provides a BoundingVolume for most of its shapes (those which do not do this state that
-fact in their javadoc header comments). Translations and rotations applied to SAGE SceneNodes
-are automatically also applied to any BoundingVolume for the SceneNode (fortunately!).
-
-100%
-
- Rather than use a separate Timer to keep track of elapsed time in the HUD, you may use the
-elapsed time parameter that BaseGame passes to your update() method (it’s value is in msec).
-
-100%
-
- You will find several classes in the graphicslib3D library (that comes with SAGE) that will likely
-be helpful. These include Point3D (a 3D point), Vector3D (a 3D vector) and Matrix3D (a 4x4
-transformation matrix). Note that every SAGE shape (sage.scene.SceneNode) contains a set
-of three Matrix3D objects which specify respectively the current translation, rotation and scaling
-transformations applied to the object. These transformations can be obtained and/or modified by
-using the appropriate getter/setter methods provided in SAGE. The transforms are referred to as
-local transforms; so for example to get the current translation of an object you would call
-getLocalTranslation(). Note that there are also other transforms in SAGE shapes called
-world transforms; your program should not mess with these (we’ll see later what they are for).
-
-
- Make sure that your program works on at least one workstation in the RVR-5029 lab. Don’t wait
-until the last minute to test this!!!
+ In this version of the game there is nothing stopping the player from moving the camera
+completely off the ground plane (beyond the (x,z) ground plane edge). That is ok for now.
+ As before, you may use the SAGE InputManager class; you do not have to write your own
+input manager. However, you will now have to actually construct an InputManager, since
+that is a step required in initSystem().
 Deliverables
 Submit to SacCT a single ZIP file containing:
 1. your Java source code (.java) files,
 2. the compiled (.class) files for each of your Java source files,
-3. a batch (.bat) file that successfully runs your submission if unzipped as-is onto a lab machine,
+3. a batch (.bat) file that runs your submission if unzipped as-is onto a lab machine,
 4. a screenshot (.jpg) file showing a typical scene from your game, and
-5. a short “Player’s Guide” document (approximately 2 pages, preferably PDF), describing:
+5. a short “Player’s Guide” document (2-3 pages, preferably PDF), describing:
  how to compile and run your program from a command window,
- how your game works, including what all the player input commands do,
+ how your game works, including how the two-player inputs work,
  how your scoring works,
+ where in your program you satisfied each of the requirements,
  anything special you added to your program not specified in the requirements,
  any of the requirements that you weren’t able to get working,
  the type of gamepad your game was tested with, and
