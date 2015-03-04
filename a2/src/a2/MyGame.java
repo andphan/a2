@@ -25,15 +25,18 @@ import net.java.games.input.*;
 
 public class MyGame extends BaseGame implements IEventListener{
 	// what type of objects are in the game
-	private Rectangle rect1;
-	private Sphere sph;
-	private Cylinder cyl;
-	private myNewTriMesh myT;
-	private Cube cub;
-	private IDisplaySystem display;
-	private ICamera p1Camera, p2Camera;
-	private IInputManager im;
-	private IEventManager em;
+	
+	OrbitCamera oc1, oc2;
+	Rectangle rect1;
+	Sphere sph;
+	Cylinder cyl;
+	myNewTriMesh myT;
+	Cube cub;
+	IDisplaySystem display;
+	ICamera camera;
+	ICamera p1Camera, p2Camera;
+	IInputManager im;
+	IEventManager em;
 	private int numHit;
 	private int score = 0;
 	private SceneNode p1, p2;
@@ -50,39 +53,45 @@ public class MyGame extends BaseGame implements IEventListener{
 		{	
 			IInputManager im = getInputManager();
 			em = EventManager.getInstance();
+			renderer = getDisplaySystem().getRenderer();
 			// initialize Managers
 			System.out.println("initGame call");
 			initGameObjects();	
-			createPlayers();
+			createPlayers();	
 
 			kbName = im.getKeyboardName();
 			gpName = im.getFirstGamepadName();
 			
+			
+			oc1 = new OrbitCamera(p1Camera, p1, im, gpName);
+			oc2 = new OrbitCamera(p2Camera, p2, im, gpName);
+			
 			// create keyboard actions
 			MovementToggle movement = new MovementToggle();
 			IAction quitGame = new QuitGameAction(this);
-			IAction moveForward = new ForwardCameraMovement(p1Camera, movement);
-			IAction moveBackward = new BackCameraMovement(p1Camera, movement);
-			IAction moveLeft = new LeftCameraMovement(p1Camera);
-			IAction moveRight = new RightCameraMovement(p1Camera);
-			IAction rotateUp = new RotateUpCamera(p1Camera);
-			IAction rotateDown = new RotateDownCamera(p1Camera);
-			IAction rotateLeft = new RotateLeftCamera(p1Camera);
-			IAction rotateRight = new RotateRightCamera(p1Camera);
+			IAction moveForward = new MoveForwardAction(p1);
+		//	IAction moveForward = new ForwardCameraMovement(camera, movement);
+			IAction moveBackward = new BackCameraMovement(camera, movement);
+			IAction moveLeft = new LeftCameraMovement(camera);
+			IAction moveRight = new RightCameraMovement(camera);
+			IAction rotateUp = new RotateUpCamera(camera);
+			IAction rotateDown = new RotateDownCamera(camera);
+			IAction rotateLeft = new RotateLeftCamera(camera);
+			IAction rotateRight = new RotateRightCamera(camera);
 		
 			// create game controller actions
 			
-			IAction controllerX = new XAxisMovement(p2Camera, 0.01f);
-			IAction controllerY = new YAxisMovement(p2Camera, 0.01f);
-			IAction controllerRX = new RXAxisMovement(p2Camera, 0.01f);
-			IAction controllerRY = new RYAxisMovement(p2Camera, 0.01f);
+			IAction controllerX = new XAxisMovement(camera, 0.01f);
+			IAction controllerY = new YAxisMovement(camera, 0.01f);
+			IAction controllerRX = new RXAxisMovement(camera, 0.01f);
+			IAction controllerRY = new RYAxisMovement(camera, 0.01f);
 		
 			/* figure out why laptop cannot run with im.associateAction */
 			
 			// Associate actions with keyboard  PLAYER 1
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.W, moveForward, 
-					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.S, moveBackward, 
+		//	im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.W, moveForward, 
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		/*	im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.S, moveBackward, 
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);			
 			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.A, moveLeft, 
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
@@ -96,27 +105,27 @@ public class MyGame extends BaseGame implements IEventListener{
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
 			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.DOWN, rotateDown, 
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
+			*/
 			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.ESCAPE, quitGame, 
 					IInputManager.INPUT_ACTION_TYPE.ON_PRESS_ONLY);
 			
 			
 			// associate actions with controllers PLAYER 2
-		    im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.RY, controllerRY,
+		//    im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.RY, controllerRY,
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+			im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.RX, moveForward,
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-			im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.RX, controllerRX,
-					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-			im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.X, controllerX,
-					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-			im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.Y, controllerY,
-					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		//	im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.X, controllerX,
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		//	im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.Y, controllerY,
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
 		}
 			
 		public void initGameObjects()
 		{
 			display = getDisplaySystem();
 			display.setTitle("Treasure Hunt 2015");
-			
-			// testing out camera
+		
 			
 			// 	create new objects by using scale()
 			Random rng = new Random();
@@ -130,7 +139,7 @@ public class MyGame extends BaseGame implements IEventListener{
 			float dy = rng.nextFloat()-(float)0.5;
 			float ex = rng.nextFloat()-(float)0.5;
 			float ey = rng.nextFloat()-(float)0.5;
-/*		
+		
 			// objects
 			rect1 = new Rectangle();
 			Matrix3D rectM = rect1.getLocalTranslation();
@@ -176,8 +185,8 @@ public class MyGame extends BaseGame implements IEventListener{
 			addGameWorldObject(myT);
 			System.out.println("myT x : "  + " myT y : " + dy);
 			myT.updateWorldBound();
+
 			
-*/
 
 
 
@@ -192,6 +201,8 @@ public class MyGame extends BaseGame implements IEventListener{
 			addGameWorldObject(xAxis);
 			addGameWorldObject(yAxis);
 			addGameWorldObject(zAxis);
+			
+		
 			
 			// add HUD
 			p1ScoreDisplay = new HUDString("P1 Score = " + score);
@@ -214,8 +225,12 @@ public class MyGame extends BaseGame implements IEventListener{
 		public void createPlayers()
 		{
 			p1 = new Cube("Player 1");
-			p1.translate(0, 0, 50);
-			p1.rotate(180, new Vector3D(0, 1, 0));
+			Matrix3D p1T = p1.getLocalTranslation();
+			p1T.translate(0, 0, 50);
+			p1.setLocalTranslation(p1T);
+			Matrix3D p1R = new Matrix3D();
+			p1R.rotateY(45.0);
+			p1.setLocalRotation(p1R);
 			addGameWorldObject(p1);
 			
 			p1Camera = new JOGLCamera(renderer);
@@ -223,9 +238,13 @@ public class MyGame extends BaseGame implements IEventListener{
 			p1Camera.setViewport(0, 1.0, 0.0, 0.45);
 			
 			
-			p2 = new Rectangle("Player 2");
-			p2.translate(0, 0, 50);
-			p2.rotate(180, new Vector3D(0, 1, 0));
+			p2 = new Cube("Player 2");
+			Matrix3D p2T = p2.getLocalTranslation();
+			p2T.translate(0, 0, 50);
+			p2.setLocalTranslation(p2T);
+			Matrix3D p2R = new Matrix3D();
+			p2R.rotateY(45.0);
+			p2.setLocalRotation(p2R);
 			addGameWorldObject(p2);
 			
 			p2Camera = new JOGLCamera(renderer);
@@ -251,12 +270,14 @@ public class MyGame extends BaseGame implements IEventListener{
 			p2ID.setCullMode(sage.scene.SceneNode.CULL_MODE.NEVER);
 			p2Camera.addToHUD(p2ID);
 			
-			
-			
 		}
+		
 		public void update(float elapsedTimeMS)
 		{
 			
+			oc1.updatePos(elapsedTimeMS);
+			oc2.updatePos(elapsedTimeMS);
+
 			// overwritten
 			// update score
 			p1ScoreDisplay.setText("P1 Score = " + score);
@@ -266,9 +287,9 @@ public class MyGame extends BaseGame implements IEventListener{
 		
 			
 			timeDisplay.setText("Time = " + (time/1000));
-/*
+
 			// collision 
-			if (rect1.getWorldBound().contains(camera.getLocation()))
+/*			if (rect1.getWorldBound().contains(camera.getLocation()))
 			{
 				crashInc++;
 				CrashEvent newCrash = new CrashEvent(crashInc);
@@ -308,7 +329,13 @@ public class MyGame extends BaseGame implements IEventListener{
 				System.out.println("removing rectangle object.");
 				removeGameWorldObject(cub);
 			}
-*/
+	*/
 		}
-		
+	protected void render()
+	{
+		renderer.setCamera(p1Camera);
+		super.render();
+		renderer.setCamera(p2Camera);
+		super.render();
 	}
+}

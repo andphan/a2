@@ -21,7 +21,7 @@ before, but also a flat ground plane (e.g. the Y=0 plane) on which reside the tr
 treasure chest, and on which each player manipulates his/her avatar. The game must also
 provide two HUD elements showing relevant game data for each player.
 
-0%
+0% - object spawns
 
 
 As before, you are welcome to add features of your own, in addition to the basic requirements,
@@ -41,11 +41,13 @@ direction (implementing a spring system would require you to do some additional 
 with their own view of the (same) world which changes as they move their cameras.
 
 
-0%
+50% with prof code 
+
+need to make the objects move.
 
  Provide HUDs for each player, each displaying data relevant only to that player.
 
-25%
+100% with prof code
 
 
  Include a ground plane - flat surface on which the game takes place. You may if you wish
@@ -53,7 +55,7 @@ allow players to leave the ground for a time (“jumping”), but they should no
 to move continuously in arbitrary 3D directions like they did in A1. Applying scale() and
 rotate() to a SAGE scene.shape.Rectangle is an easy way to define a ground plane.
 
-
+0%
 
 
  Use at least two different types of SceneNode controllers written by you. For example you
@@ -64,14 +66,16 @@ certain amount of time. The specifics are up to you, but they must be implemente
 (and should extend the Sage scene.Controller class). You may also use built-in SAGE
 controllers, as long as you also include two controller types of your own implementation.
 
-
+0%
 
  Provide support for two input controllers. For example, one player might use the keyboard
 and mouse while the second would use a gamepad. Or, your game could utilize two
 gamepads so that players have equivalent equipment. Either approach is acceptable, but
 be sure and document your implementation in your Player’s Guide.
 
-two controllers let's go with that.
+two controllers let's go with that. ask professor on that
+
+0%
 
  Your game must include at least one instance of sage.scene.Group, containing some
 set of scenenode objects in your game. It may, for example, contain the treasures, or some
