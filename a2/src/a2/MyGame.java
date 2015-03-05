@@ -338,4 +338,12 @@ public class MyGame extends BaseGame implements IEventListener{
 		renderer.setCamera(p2Camera);
 		super.render();
 	}
+	
+	private IDisplaySystem createDisplaySystem()
+	{
+		IDisplaySystem display = new MyDisplaySystem(500,500, 24, 30, false, "sage.renderer.jogl.JOGLRenderer");
+		return display;
+	}
+	
+	
 }
