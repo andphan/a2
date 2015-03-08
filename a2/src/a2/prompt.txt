@@ -50,6 +50,8 @@ need to make the objects move.
 100% with prof code
 
 
+
+
  Include a ground plane - flat surface on which the game takes place. You may if you wish
 allow players to leave the ground for a time (“jumping”), but they should not have the ability
 to move continuously in arbitrary 3D directions like they did in A1. Applying scale() and

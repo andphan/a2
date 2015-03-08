@@ -1,5 +1,6 @@
 package a2;
 
+import net.java.games.input.Component.Identifier.Axis;
 import net.java.games.input.Event;
 import graphicslib3D.Point3D;
 import graphicslib3D.Vector3D;
@@ -28,9 +29,9 @@ public class OrbitCamera {
 		this.camera = c;
 		this.target = t;
 		worldUpVec = new Vector3D(0,1,0);
-		distance = 10f;
+		distance = 5.0f;
 		cameraYAxis = 180;
-		cameraHeight = 20f;
+		cameraHeight = 20.0f;
 		updatePos(0.0f);
 		setupInput(im, cName);
 		
@@ -38,7 +39,7 @@ public class OrbitCamera {
 	
 	public void updatePos(float time)
 	{
-	//	 System.out.println("update called");
+	//	System.out.println("update called");
 		updateTarget();
 		updateCameraPos();
 		camera.lookAt(avatarPosition, worldUpVec);
@@ -47,7 +48,6 @@ public class OrbitCamera {
 	private void updateTarget()
 	{
 		avatarPosition = new Point3D(target.getWorldTranslation().getCol(3));
-	//	 System.out.println("avatar Position " + avatarPosition);
 	}
 	private void updateCameraPos()
 	{
@@ -56,18 +56,20 @@ public class OrbitCamera {
 		double r = distance;
 		
 		Point3D currentPos = MathUtils.sphericalToCartesian(theta, phi, r);
+		
+	//	System.out.println("currentPOS " + currentPos);
 		Point3D newLoc = currentPos.add(avatarPosition);
 		camera.setLocation(newLoc);
-//		 System.out.println("Camera loc" + newLoc);
+	//	System.out.println("Camera loc" + newLoc);
 	}
 	private void setupInput(IInputManager im, String cn)
 	{
 		IAction orbitMovement = new OrbitMovementAction();
 		IAction orbitZoom = new zoomFunction();
 		
-		im.associateAction(cn, net.java.games.input.Component.Identifier.Axis.RX, orbitMovement, IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-		im.associateAction(cn, net.java.games.input.Component.Identifier.Axis.RY, orbitZoom, IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-	//	 System.out.println("setup action called");
+		im.associateAction(cn, Axis.RX, orbitMovement, IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		im.associateAction(cn, Axis.RY, orbitZoom, IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		 System.out.println("setup action called");
 	}
 	
 	private class OrbitMovementAction extends AbstractInputAction
@@ -86,19 +88,27 @@ public class OrbitCamera {
 			 cameraYAxis += amount;
 			 cameraYAxis = cameraYAxis % 360;
 			 
-		//	 System.out.println("perform action called");
+			 System.out.println("perform action called");
 		}
 		
 	}
 	private class zoomFunction extends AbstractInputAction
 	{
 
-		@Override
-		public void performAction(float arg0, Event arg1) {
-			// TODO Auto-generated method stub
+public void performAction(float time, Event e) {
 			
-		}
-		
+			float amount;
+			 if (e.getValue() < -0.2)
+			 { amount = -0.1f; }
+			 else { if (e.getValue() > 0.2)
+			 { amount = 0.1f; }
+			 else { amount = 0.0f; }
+			 }
+			 distance += amount;
+			 distance = distance % 360;
+			 
+			 System.out.println("perform action called");
+		}		
 	}
 	
 }
