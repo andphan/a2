@@ -15,6 +15,7 @@ import graphicslib3D.Matrix3D;
 import graphicslib3D.Point3D;
 import graphicslib3D.Vector3D;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.awt.Color;
 import java.nio.*;
@@ -29,6 +30,7 @@ public class MyGame extends BaseGame implements IEventListener{
 	
 	OrbitCamera oc1, oc2;
 	Rectangle rect1;
+	Rectangle theGround;
 	Sphere sph;
 	Cylinder cyl;
 	myNewTriMesh myT;
@@ -45,10 +47,19 @@ public class MyGame extends BaseGame implements IEventListener{
 //	private HUDString p1ScoreDisplay;
 //	private HUDString p2ScoreDisplay;
 	private HUDString timeDisplay;
-	private String kbName;
-	private String gpName;
+	private String kbName, mName;
+	private String gpName, gpName2;
 	private float time = 0;
 	int crashInc = 0;
+	
+	
+/*
+ * 	(non-Javadoc)
+ * @see sage.app.BaseGame#initGame()
+ * 
+ * 
+ *  3-8-15 - see issue with controller issues. 
+ */
 	
 		public void initGame() // override
 		{	
@@ -56,16 +67,14 @@ public class MyGame extends BaseGame implements IEventListener{
 			em = EventManager.getInstance();
 			renderer = getDisplaySystem().getRenderer();
 			// initialize Managers
-			System.out.println("initGame call");
 			initGameObjects();	
-			initInputs();
 			createPlayers();	
+			initInputs();
 			
+			oc1 = new OrbitCamera(p1Camera, p1, im, mName);
+			oc2 = new OrbitCamera(p2Camera, p2, im, gpName);
 			
-			oc1 = new OrbitCamera(p1Camera, p1, im, gpName);
-			oc2 = new OrbitCamera(p2Camera, p2, im, kbName);
-			
-			super.update(0.0f);
+		//	super.update(0.0f);
 			
 		}
 			
@@ -93,14 +102,29 @@ public class MyGame extends BaseGame implements IEventListener{
 			
 		
 			// objects
-/*			rect1 = new Rectangle();
+			
+			// plane
+			theGround = new Rectangle();
+			Matrix3D theGroundM = theGround.getLocalTranslation();
+			theGroundM.translate(0, 50, 0);
+			theGround.setLocalTranslation(theGroundM);
+			theGround.setColor(Color.orange);
+			theGround.scale(200, 200, 200);
+			Matrix3D theGR = new Matrix3D();
+			theGR.rotateY(45.0);
+			theGround.setLocalRotation(theGR);
+			
+			addGameWorldObject(theGround);
+			
+			
+			rect1 = new Rectangle();
 			Matrix3D rectM = rect1.getLocalTranslation();
 			rectM.translate(ax, 0, ay);
 			rect1.setLocalTranslation(rectM);
 			addGameWorldObject(rect1);
 			System.out.println("rect x : " + ax + " rect y : " + ay);
 			rect1.updateWorldBound();
-
+/*
 			
 			sph = new Sphere();
 			Matrix3D sphM = sph.getLocalTranslation();
@@ -179,9 +203,9 @@ public class MyGame extends BaseGame implements IEventListener{
 			p1Camera.setPerspectiveFrustum(60, 2, 1, 1000);
 			p1Camera.setViewport(0, 1.0, 0.0, 0.45);
 			
-			p1 = new Cylinder("Player 1");
+			p1 = new Cube("Player 1");
 			Matrix3D p1T = p1.getLocalTranslation();
-			p1T.translate(0, 0, 50);
+			p1T.translate(0, 0, 0);
 			p1.setLocalTranslation(p1T);
 			Matrix3D p1R = new Matrix3D();
 			p1R.rotateY(45.0);
@@ -198,7 +222,7 @@ public class MyGame extends BaseGame implements IEventListener{
 				
 			
 			p2 = new Cube("Player 2");
-			p2.translate(50,  1, 0);
+			p2.translate(0, 0, 0);
 			p2.rotate(-90, new Vector3D(0,1,0));
 			Matrix3D p2T = p2.getLocalTranslation();
 			p2T.translate(0, 0, 50);
@@ -236,15 +260,19 @@ public class MyGame extends BaseGame implements IEventListener{
 		{
 			im = getInputManager();
 			kbName = im.getKeyboardName();
+			mName = im.getMouseName();
 			gpName = im.getFirstGamepadName();
-			
-
+			System.out.println("first controller: " + gpName);
+			gpName2 = im.getSecondGamepadName();
+			System.out.println("second controller: " + gpName2);
 			
 			// create keyboard actions
 			MovementToggle movement = new MovementToggle();
 			IAction quitGame = new QuitGameAction(this);
 			IAction moveForwardP1 = new MoveForwardAction(p1);
-			IAction moveForwardP2= new MoveForwardAction(p2);
+			IAction moveBackwardP1 = new MoveBackwardAction(p1);
+			IAction moveForwardP2 = new MoveForwardAction(p2);
+			IAction moveBackwardP2 = new MoveBackwardAction(p2);
 		/*	IAction moveBackward = new BackCameraMovement(camera, movement);
 			IAction moveLeft = new LeftCameraMovement(camera);
 			IAction moveRight = new RightCameraMovement(camera);
@@ -263,7 +291,9 @@ public class MyGame extends BaseGame implements IEventListener{
 			/* figure out why laptop cannot run with im.associateAction */
 			
 			// Associate actions with keyboard  PLAYER 1
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.W, moveForwardP2, // do two controllers instead
+			im.associateAction(mName, net.java.games.input.Component.Identifier.Button.LEFT, moveForwardP1, // do two controllers instead
+					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+			im.associateAction(mName, net.java.games.input.Component.Identifier.Button.RIGHT, moveBackwardP1, // do two controllers instead
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
 		/*	im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.S, moveBackward, 
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);			
@@ -280,19 +310,32 @@ public class MyGame extends BaseGame implements IEventListener{
 			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.DOWN, rotateDown, 
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);	
 			*/
+			
 			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.ESCAPE, quitGame, 
 					IInputManager.INPUT_ACTION_TYPE.ON_PRESS_ONLY);
 			
 			
 			// associate actions with controllers PLAYER 2
-		//    im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.RY, controllerRY,
-		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-			im.associateAction(gpName, Axis.RX, moveForwardP1,
+			im.associateAction(gpName, net.java.games.input.Component.Identifier.Button._3, moveBackwardP2,
+					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+			im.associateAction(gpName, net.java.games.input.Component.Identifier.Button._0, moveForwardP2,
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
 		//	im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.X, controllerX,
 		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
 		//	im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.Y, controllerY,
 		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+			
+			// associate actions with controllers PLAYER 2
+		//  im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.RY, controllerRY,
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		//	im.associateAction(gpName2, Axis.X, moveForwardP2,
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		//	im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.X, controllerX,
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		//	im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.Y, controllerY,
+		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+			
+			
 			
 			
 		}

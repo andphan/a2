@@ -1,6 +1,7 @@
 package a2;
 
 import net.java.games.input.Component.Identifier.Axis;
+import a2.MyGame;
 import net.java.games.input.Event;
 import graphicslib3D.Point3D;
 import graphicslib3D.Vector3D;
@@ -39,11 +40,9 @@ public class OrbitCamera {
 	
 	public void updatePos(float time)
 	{
-	//	System.out.println("update called");
 		updateTarget();
 		updateCameraPos();
 		camera.lookAt(avatarPosition, worldUpVec);
-
 	}
 	private void updateTarget()
 	{
@@ -56,20 +55,32 @@ public class OrbitCamera {
 		double r = distance;
 		
 		Point3D currentPos = MathUtils.sphericalToCartesian(theta, phi, r);
-		
-	//	System.out.println("currentPOS " + currentPos);
+
 		Point3D newLoc = currentPos.add(avatarPosition);
 		camera.setLocation(newLoc);
-	//	System.out.println("Camera loc" + newLoc);
+
 	}
 	private void setupInput(IInputManager im, String cn)
 	{
 		IAction orbitMovement = new OrbitMovementAction();
+		IAction orbitMouseMovement = new OrbitMovementAction();
 		IAction orbitZoom = new zoomFunction();
+		IAction orbitMouseZoom = new zoomFunction();
 		
+		if (cn.equals("Controller (XBOX 360 For Windows)"))
+		{
+		System.out.println("controller exists for orbit");
 		im.associateAction(cn, Axis.RX, orbitMovement, IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
 		im.associateAction(cn, Axis.RY, orbitZoom, IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-		 System.out.println("setup action called");
+		}
+		if (cn.equals("HID-compliant mouse"))
+		{
+		System.out.println("mouse");
+		im.associateAction(cn, net.java.games.input.Component.Identifier.Button.MIDDLE, orbitMouseMovement, IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		// mess around with this later
+		im.associateAction(cn, net.java.games.input.Component.Identifier.Button.MIDDLE, orbitMouseZoom, IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+			
+		}
 	}
 	
 	private class OrbitMovementAction extends AbstractInputAction
@@ -88,7 +99,6 @@ public class OrbitCamera {
 			 cameraYAxis += amount;
 			 cameraYAxis = cameraYAxis % 360;
 			 
-			 System.out.println("perform action called");
 		}
 		
 	}
@@ -106,8 +116,6 @@ public void performAction(float time, Event e) {
 			 }
 			 distance += amount;
 			 distance = distance % 360;
-			 
-			 System.out.println("perform action called");
 		}		
 	}
 	

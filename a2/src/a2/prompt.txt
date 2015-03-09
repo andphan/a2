@@ -49,6 +49,10 @@ need to make the objects move.
 
 100% with prof code
 
+questions: 
+
+need to see why controller forward/back isn't working
+
 
 
 
@@ -57,7 +61,10 @@ allow players to leave the ground for a time (“jumping”), but they should no
 to move continuously in arbitrary 3D directions like they did in A1. Applying scale() and
 rotate() to a SAGE scene.shape.Rectangle is an easy way to define a ground plane.
 
-0%
+
+
+
+75% - need to make a block so objects can't move
 
 
  Use at least two different types of SceneNode controllers written by you. For example you
@@ -75,9 +82,11 @@ and mouse while the second would use a gamepad. Or, your game could utilize two
 gamepads so that players have equivalent equipment. Either approach is acceptable, but
 be sure and document your implementation in your Player’s Guide.
 
-two controllers let's go with that. ask professor on that
+KB/M - 100%
 
-0%
+controller - 50%
+
+need to figure out the conflict between controller movement
 
  Your game must include at least one instance of sage.scene.Group, containing some
 set of scenenode objects in your game. It may, for example, contain the treasures, or some
