@@ -76,9 +76,9 @@ public class OrbitCamera {
 		if (cn.equals("HID-compliant mouse"))
 		{
 		System.out.println("mouse");
-		im.associateAction(cn, net.java.games.input.Component.Identifier.Button.MIDDLE, orbitMouseMovement, IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		im.associateAction(cn, net.java.games.input.Component.Identifier.Button.LEFT, orbitMouseMovement, IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
 		// mess around with this later
-		im.associateAction(cn, net.java.games.input.Component.Identifier.Button.MIDDLE, orbitMouseZoom, IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+		im.associateAction(cn, net.java.games.input.Component.Identifier.Button.RIGHT, orbitMouseZoom, IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
 			
 		}
 	}

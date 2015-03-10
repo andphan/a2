@@ -269,10 +269,15 @@ public class MyGame extends BaseGame implements IEventListener{
 			// create keyboard actions
 			MovementToggle movement = new MovementToggle();
 			IAction quitGame = new QuitGameAction(this);
-			IAction moveForwardP1 = new MoveForwardAction(p1);
-			IAction moveBackwardP1 = new MoveBackwardAction(p1);
-			IAction moveForwardP2 = new MoveForwardAction(p2);
-			IAction moveBackwardP2 = new MoveBackwardAction(p2);
+			IAction moveForwardP1 = new MoveForwardAction(p1); // w kb
+			IAction moveBackwardP1 = new MoveBackwardAction(p1); // s kb
+			IAction moveLeftP1 = new MoveLeftAction(p1); // a kb
+			IAction moveRightP1 = new MoveRightAction(p1); // d kb
+			IAction moveForwardP2 = new MoveForwardAction(p2); // a
+			IAction moveBackwardP2 = new MoveBackwardAction(p2); // y
+			IAction moveLeftP2 = new MoveLeftAction(p2); // x
+			IAction moveRightP2 = new MoveRightAction(p2); // b
+			
 		/*	IAction moveBackward = new BackCameraMovement(camera, movement);
 			IAction moveLeft = new LeftCameraMovement(camera);
 			IAction moveRight = new RightCameraMovement(camera);
@@ -291,9 +296,13 @@ public class MyGame extends BaseGame implements IEventListener{
 			/* figure out why laptop cannot run with im.associateAction */
 			
 			// Associate actions with keyboard  PLAYER 1
-			im.associateAction(mName, net.java.games.input.Component.Identifier.Button.LEFT, moveForwardP1, // do two controllers instead
+			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.W, moveForwardP1, // do two controllers instead
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-			im.associateAction(mName, net.java.games.input.Component.Identifier.Button.RIGHT, moveBackwardP1, // do two controllers instead
+			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.S, moveBackwardP1, // do two controllers instead
+					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.A, moveLeftP1, // do two controllers instead
+					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.D, moveRightP1, // do two controllers instead
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
 		/*	im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.S, moveBackward, 
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);			
@@ -319,6 +328,10 @@ public class MyGame extends BaseGame implements IEventListener{
 			im.associateAction(gpName, net.java.games.input.Component.Identifier.Button._3, moveBackwardP2,
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
 			im.associateAction(gpName, net.java.games.input.Component.Identifier.Button._0, moveForwardP2,
+					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+			im.associateAction(gpName, net.java.games.input.Component.Identifier.Button._1, moveRightP2,
+					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
+			im.associateAction(gpName, net.java.games.input.Component.Identifier.Button._2, moveLeftP2,
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
 		//	im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.X, controllerX,
 		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
