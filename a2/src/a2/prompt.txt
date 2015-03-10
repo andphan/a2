@@ -49,10 +49,6 @@ need to make the objects move.
 
 100% with prof code
 
-questions: 
-
-need to see why controller forward/back isn't working
-
 
 
 
@@ -75,7 +71,7 @@ certain amount of time. The specifics are up to you, but they must be implemente
 (and should extend the Sage scene.Controller class). You may also use built-in SAGE
 controllers, as long as you also include two controller types of your own implementation.
 
-0%
+0% basic framework down from sample
 
  Provide support for two input controllers. For example, one player might use the keyboard
 and mouse while the second would use a gamepad. Or, your game could utilize two
@@ -84,7 +80,7 @@ be sure and document your implementation in your Player’s Guide.
 
 KB/M - 100%
 
-controller - 50%
+controller - 100%
 
 need to figure out the conflict between controller movement
 
@@ -97,7 +93,7 @@ attach a node controller to the group. The main purpose of this requirement is f
 some practice working with the basic scenegraph operations.
 
 
-0%
+100%
 
  Provide your own implementation of IDisplaySystem. As before, your game should be
 defined by extending sage.app.BaseGame and overriding methods initGame() and

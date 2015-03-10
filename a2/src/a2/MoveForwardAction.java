@@ -25,7 +25,5 @@ public class MoveForwardAction extends AbstractInputAction {
 		 
 		 avatar.translate((float)dir.getX(),(float)dir.getY(),(float)dir.getZ());
 		 
-		 
-		 System.out.println("avatar " + avatar + " moving forward");
 	}
 }

@@ -40,17 +40,18 @@ public class MyGame extends BaseGame implements IEventListener{
 	ICamera camera;
 	IInputManager im;
 	IEventManager em;
-//	private int numHit;
-//	private int score = 0;
+	private int numHit;
+	private int score = 0;
 	private SceneNode p1, p2;
 	private IRenderer renderer;
-//	private HUDString p1ScoreDisplay;
-//	private HUDString p2ScoreDisplay;
+	private HUDString p1ScoreDisplay;
+	private HUDString p2ScoreDisplay;
 	private HUDString timeDisplay;
 	private String kbName, mName;
 	private String gpName, gpName2;
 	private float time = 0;
 	int crashInc = 0;
+	Group treasures;
 	
 	
 /*
@@ -58,7 +59,10 @@ public class MyGame extends BaseGame implements IEventListener{
  * @see sage.app.BaseGame#initGame()
  * 
  * 
- *  3-8-15 - see issue with controller issues. 
+ *  3-8-15 - fixed controller issues
+ *  3-9-15 - plane needs to be fixed
+ *  3-10-15 - going to try treasures - need to change up to do rotate/spin
+ *  								 - need to add another group ... trees or rocks?
  */
 	
 		public void initGame() // override
@@ -100,9 +104,7 @@ public class MyGame extends BaseGame implements IEventListener{
 			
 			
 			
-		
-			// objects
-			
+	
 			// plane
 			theGround = new Rectangle();
 			Matrix3D theGroundM = theGround.getLocalTranslation();
@@ -121,16 +123,14 @@ public class MyGame extends BaseGame implements IEventListener{
 			Matrix3D rectM = rect1.getLocalTranslation();
 			rectM.translate(ax, 0, ay);
 			rect1.setLocalTranslation(rectM);
-			addGameWorldObject(rect1);
 			System.out.println("rect x : " + ax + " rect y : " + ay);
 			rect1.updateWorldBound();
-/*
+
 			
 			sph = new Sphere();
 			Matrix3D sphM = sph.getLocalTranslation();
 			sphM.translate(bx, 0, by);
 			sph.setLocalTranslation(sphM);
-			addGameWorldObject(sph);
 			System.out.println("sph x : " + bx + " sph y : " + by);
 			sph.updateWorldBound();
 
@@ -139,7 +139,6 @@ public class MyGame extends BaseGame implements IEventListener{
 			Matrix3D cylM = cyl.getLocalTranslation();
 			cylM.translate(cx, 0, cy);
 			cyl.setLocalTranslation(cylM);
-			addGameWorldObject(cyl);
 			System.out.println("cyl x : " + cx + " cyl y : " + cy);
 			cyl.updateWorldBound();
 
@@ -148,7 +147,6 @@ public class MyGame extends BaseGame implements IEventListener{
 			Matrix3D cubM = cub.getLocalTranslation();
 			cubM.translate(ex, 0, ey);
 			cub.setLocalTranslation(cubM);
-			addGameWorldObject(cub);
 			System.out.println("cub x : " + ex + " cub y : " + ey);
 			cub.updateWorldBound();
 			
@@ -158,19 +156,31 @@ public class MyGame extends BaseGame implements IEventListener{
 			Matrix3D myTM = myT.getLocalTranslation();
 			myTM.translate(0, 0, 0);
 			myT.setLocalTranslation(myTM);
-			addGameWorldObject(myT);
 			System.out.println("myT x : "  + " myT y : " + dy);
 			myT.updateWorldBound();
 
-			*/
-
+			
+			treasures = new Group("base");
+			treasures.addChild(rect1);
+			treasures.addChild(sph);
+			treasures.addChild(cyl);
+			treasures.addChild(cub);
+			treasures.translate(2, 0, 0);
+			addGameWorldObject(treasures);
+			
+			MySpinController msc = new MySpinController();
+			msc.addControlledNode(treasures);
+			treasures.addController(msc);
+			
+			
+			
 
 
 			// add x, y, and z coordinates
 			Point3D origin = new Point3D(0,0,0);
-			Point3D xEnd = new Point3D(100,0,0);
-			Point3D yEnd = new Point3D(0,100,0);
-			Point3D zEnd = new Point3D(0,0,100);
+			Point3D xEnd = new Point3D(1000,0,0);
+			Point3D yEnd = new Point3D(0,1000,0);
+			Point3D zEnd = new Point3D(0,0,1000);
 			Line xAxis = new Line(origin, xEnd, Color.red, 1);
 			Line yAxis = new Line(origin, yEnd, Color.green, 1);
 			Line zAxis = new Line(origin, zEnd, Color.blue, 1);
@@ -180,7 +190,7 @@ public class MyGame extends BaseGame implements IEventListener{
 			
 		
 			
-	/*		// add HUD
+			// add HUD
 			p1ScoreDisplay = new HUDString("P1 Score = " + score);
 			p1ScoreDisplay.setColor(Color.orange);
 			addGameWorldObject(p1ScoreDisplay);
@@ -188,7 +198,7 @@ public class MyGame extends BaseGame implements IEventListener{
 			p2ScoreDisplay.setLocation(0, 0.050);
 			p2ScoreDisplay.setColor(Color.GREEN);
 			addGameWorldObject(p2ScoreDisplay);
-	*/	
+		
 			timeDisplay = new HUDString("Time = " + time);
 			timeDisplay.setColor(Color.WHITE);
 			timeDisplay.setLocation(0, 0.025);
@@ -363,8 +373,8 @@ public class MyGame extends BaseGame implements IEventListener{
 
 			// overwritten
 			// update score
-		//	p1ScoreDisplay.setText("P1 Score = " + score);
-		//	p2ScoreDisplay.setText("P2 Score = " + score);
+			p1ScoreDisplay.setText("P1 Score = " + score);
+			p2ScoreDisplay.setText("P2 Score = " + score);
 			
 			time += elapsedTimeMS;
 		
@@ -412,7 +422,8 @@ public class MyGame extends BaseGame implements IEventListener{
 				System.out.println("removing rectangle object.");
 				removeGameWorldObject(cub);
 			}
-	*/
+			*/
+	
 		}
 	protected void render()
 	{
