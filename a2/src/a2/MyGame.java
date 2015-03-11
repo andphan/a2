@@ -29,29 +29,40 @@ public class MyGame extends BaseGame implements IEventListener{
 	// what type of objects are in the game
 	
 	OrbitCamera oc1, oc2;
+	
+	// treasures
 	Rectangle rect1;
-	Rectangle theGround;
+
 	Sphere sph;
 	Cylinder cyl;
 	myNewTriMesh myT;
 	Cube cub;
+	
+	// plane
+	Rectangle theGround;
+	Plane thePlane;
+	
+	// bombs
+	Pyramid pyrA, pyrB, pyrC, pyrD, pyrE;
+	
+	
 	IDisplaySystem display;
 	ICamera p1Camera, p2Camera;
 	ICamera camera;
 	IInputManager im;
 	IEventManager em;
 	private int numHit;
-	private int score = 0;
+	private int p1Score = 0;
+	private int p2Score = 0;
 	private SceneNode p1, p2;
 	private IRenderer renderer;
-	private HUDString p1ScoreDisplay;
-	private HUDString p2ScoreDisplay;
 	private HUDString timeDisplay;
+	private HUDString p1ID, p2ID;
 	private String kbName, mName;
 	private String gpName, gpName2;
 	private float time = 0;
 	int crashInc = 0;
-	Group treasures;
+	Group treasures, bombs;
 	
 	
 /*
@@ -90,25 +101,35 @@ public class MyGame extends BaseGame implements IEventListener{
 			
 			// 	create new objects by using scale()
 			Random rng = new Random();
-			float ax = rng.nextFloat()-(float)0.5;
-			float ay = rng.nextFloat()-(float)0.5;
-			float bx = rng.nextFloat()-(float)0.5;
-			float by = rng.nextFloat()-(float)0.5;
-			float cx = rng.nextFloat()-(float)0.5;
-			float cy = rng.nextFloat()-(float)0.5;
-			float dx = rng.nextFloat()-(float)0.5;
-			float dy = rng.nextFloat()-(float)0.5;
-			float ex = rng.nextFloat()-(float)0.5;
-			float ey = rng.nextFloat()-(float)0.5;
+			// floats for objects
+			float ax = rng.nextFloat();
+			float ay = rng.nextFloat();
+			float bx = rng.nextFloat();
+			float by = rng.nextFloat();
+			float cx = rng.nextFloat();
+			float cy = rng.nextFloat();
+			float dx = rng.nextFloat();
+			float dy = rng.nextFloat();
+			float ex = rng.nextFloat();
+			float ey = rng.nextFloat();
 			
+			// floats for bombs
+			float fx = rng.nextFloat();
+			float fz = rng.nextFloat();
+			float hx = rng.nextFloat();
+			float hz = rng.nextFloat();
+			float ix = rng.nextFloat();
+			float iz = rng.nextFloat();
+			float jx = rng.nextFloat();
+			float jz = rng.nextFloat();
+			float kx = rng.nextFloat();
+			float kz = rng.nextFloat();
 			
-			
-			
-	
+		
 			// plane
 			theGround = new Rectangle();
 			Matrix3D theGroundM = theGround.getLocalTranslation();
-			theGroundM.translate(0, 50, 0);
+			theGroundM.translate(50, 50, 50);
 			theGround.setLocalTranslation(theGroundM);
 			theGround.setColor(Color.orange);
 			theGround.scale(200, 200, 200);
@@ -117,8 +138,8 @@ public class MyGame extends BaseGame implements IEventListener{
 			theGround.setLocalRotation(theGR);
 			
 			addGameWorldObject(theGround);
-			
-			
+	
+			// treasures
 			rect1 = new Rectangle();
 			Matrix3D rectM = rect1.getLocalTranslation();
 			rectM.translate(ax, 0, ay);
@@ -158,8 +179,43 @@ public class MyGame extends BaseGame implements IEventListener{
 			myT.setLocalTranslation(myTM);
 			System.out.println("myT x : "  + " myT y : " + dy);
 			myT.updateWorldBound();
-
 			
+			
+			// bomb creation
+			pyrA = new Pyramid();
+			Matrix3D pyrAM = pyrA.getLocalTranslation();
+			pyrAM.translate(fx, 0, fz);
+			pyrA.setLocalTranslation(pyrAM);
+			pyrA.updateWorldBound();
+			
+			pyrB = new Pyramid();
+			Matrix3D pyrBM = pyrB.getLocalTranslation();
+			pyrBM.translate(hx, 0, hz);
+			pyrB.setLocalTranslation(pyrBM);
+			pyrB.updateWorldBound();
+			
+			pyrC = new Pyramid();
+			Matrix3D pyrCM = pyrC.getLocalTranslation();
+			pyrCM.translate(ix, 0, iz);
+			pyrC.setLocalTranslation(pyrCM);
+			pyrC.updateWorldBound();
+			
+			pyrD = new Pyramid();
+			Matrix3D pyrDM = pyrD.getLocalTranslation();
+			pyrDM.translate(jx, 0, jz);
+			pyrD.setLocalTranslation(pyrDM);
+			pyrD.updateWorldBound();
+			
+			
+			pyrE = new Pyramid();
+			Matrix3D pyrEM = pyrE.getLocalTranslation();
+			pyrEM.translate(kx, 0, kz);
+			pyrE.setLocalTranslation(pyrEM);
+			pyrE.updateWorldBound();
+			
+			
+
+			// group creation
 			treasures = new Group("base");
 			treasures.addChild(rect1);
 			treasures.addChild(sph);
@@ -172,6 +228,17 @@ public class MyGame extends BaseGame implements IEventListener{
 			msc.addControlledNode(treasures);
 			treasures.addController(msc);
 			
+			bombs = new Group("bombs");
+			bombs.addChild(pyrA);
+			bombs.addChild(pyrB);
+			bombs.addChild(pyrC);
+			bombs.addChild(pyrD);
+			bombs.addChild(pyrE);
+			addGameWorldObject(bombs);
+			
+			MyZRotateController mzr = new MyZRotateController();
+			mzr.addControlledNode(bombs);
+			bombs.addController(mzr);
 			
 			
 
@@ -191,14 +258,6 @@ public class MyGame extends BaseGame implements IEventListener{
 		
 			
 			// add HUD
-			p1ScoreDisplay = new HUDString("P1 Score = " + score);
-			p1ScoreDisplay.setColor(Color.orange);
-			addGameWorldObject(p1ScoreDisplay);
-			p2ScoreDisplay = new HUDString("P2 Score = " + score);
-			p2ScoreDisplay.setLocation(0, 0.050);
-			p2ScoreDisplay.setColor(Color.GREEN);
-			addGameWorldObject(p2ScoreDisplay);
-		
 			timeDisplay = new HUDString("Time = " + time);
 			timeDisplay.setColor(Color.WHITE);
 			timeDisplay.setLocation(0, 0.025);
@@ -250,7 +309,7 @@ public class MyGame extends BaseGame implements IEventListener{
 		{
 		// player HUDs
 		
-		HUDString p1ID = new HUDString("Player 1");
+		p1ID = new HUDString("Player 1");
 		p1ID.setName("Player1ID");
 		p1ID.setLocation(0.01, 0.06);
 		p1ID.setRenderMode(sage.scene.SceneNode.RENDER_MODE.OPAQUE);
@@ -258,7 +317,7 @@ public class MyGame extends BaseGame implements IEventListener{
 		p1ID.setCullMode(sage.scene.SceneNode.CULL_MODE.NEVER);
 		p1Camera.addToHUD(p1ID);
 		
-		HUDString p2ID = new HUDString("Player 2");
+		p2ID = new HUDString("Player 2");
 		p2ID.setName("Player2ID");
 		p2ID.setLocation(0.01, 0.06);
 		p2ID.setRenderMode(sage.scene.SceneNode.RENDER_MODE.OPAQUE);
@@ -373,8 +432,8 @@ public class MyGame extends BaseGame implements IEventListener{
 
 			// overwritten
 			// update score
-			p1ScoreDisplay.setText("P1 Score = " + score);
-			p2ScoreDisplay.setText("P2 Score = " + score);
+			p1ID.setText("P1 Score = " + p1Score);
+			p2ID.setText("P2 Score = " + p2Score);
 			
 			time += elapsedTimeMS;
 		

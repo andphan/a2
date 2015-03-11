@@ -4,7 +4,7 @@ import sage.scene.Controller;
 import sage.scene.SceneNode;
 import graphicslib3D.Matrix3D;
 
-public class MySpinController extends Controller {
+public class MyZRotateController extends Controller {
 
 	private double rate = .002;
 	private double cycle = 2000.0;
@@ -27,11 +27,11 @@ public class MySpinController extends Controller {
 		
 		
 		Matrix3D newTrans = new Matrix3D();
-		newTrans.rotateY(45);
+		newTrans.rotateZ(180);
 		for (SceneNode node : controlledNodes)
 		{
 			Matrix3D curTrans = node.getLocalRotation();
-			curTrans.rotateY(45);
+			curTrans.rotateY(180);
 			node.setLocalRotation(curTrans);
 		}
 	}
