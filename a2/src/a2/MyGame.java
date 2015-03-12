@@ -492,4 +492,13 @@ public class MyGame extends BaseGame implements IEventListener{
 		super.render();
 	}
 	
+	
+	private IDisplaySystem createDisplaySystem()
+	{
+		
+		IDisplaySystem display = new MyNewDisplaySystem(500, 500, 24, 30, true, "sage.renderer.jogl.JOGL.Renderer");
+		
+		return display;
+	}
+	
 }

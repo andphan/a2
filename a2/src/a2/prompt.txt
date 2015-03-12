@@ -71,7 +71,7 @@ certain amount of time. The specifics are up to you, but they must be implemente
 (and should extend the Sage scene.Controller class). You may also use built-in SAGE
 controllers, as long as you also include two controller types of your own implementation.
 
-0% basic framework down from sample
+100%
 
  Provide support for two input controllers. For example, one player might use the keyboard
 and mouse while the second would use a gamepad. Or, your game could utilize two
@@ -103,7 +103,7 @@ welcome to follow the outline given in the course notes and sample code handout.
 (Note that overriding render() is not the same thing as implementing a Renderer; you may
 use the JOGLRenderer implementation in the creation of your IDisplaySystem)
 
-0%
+50%
 
  Your game must run in FSEM (Full-Screen Exclusive Mode), or provide an FSEM option.
 
