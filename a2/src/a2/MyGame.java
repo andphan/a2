@@ -16,13 +16,9 @@ import graphicslib3D.Point3D;
 import graphicslib3D.Vector3D;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.Scanner;
 import java.awt.Color;
-import java.nio.*;
 
-import net.java.games.input.Component.Identifier.Axis;
-import net.java.games.input.Controller;
-import net.java.games.input.*;
 
 
 public class MyGame extends BaseGame implements IEventListener{
@@ -32,18 +28,19 @@ public class MyGame extends BaseGame implements IEventListener{
 	
 	// treasures
 	Rectangle rect1;
-
 	Sphere sph;
 	Cylinder cyl;
-	myNewTriMesh myT;
+
 	Cube cub;
 	
 	// plane
 	Rectangle theGround;
-	Plane thePlane;
 	
 	// bombs
 	Pyramid pyrA, pyrB, pyrC, pyrD, pyrE;
+	
+	// treasure chest
+	myNewTriMesh myT;
 	
 	
 	IDisplaySystem display;
@@ -52,14 +49,17 @@ public class MyGame extends BaseGame implements IEventListener{
 	IInputManager im;
 	IEventManager em;
 	private int numHit;
+	private int fsemFlag = 0;
 	private int p1Score = 0;
 	private int p2Score = 0;
 	private SceneNode p1, p2;
+	private boolean FSEMtoggle;
 	private IRenderer renderer;
 	private HUDString timeDisplay;
 	private HUDString p1ID, p2ID;
 	private HUDString p1ScoreString, p2ScoreString;
 	private String kbName, mName;
+	private String renderName = "sage.renderer.jogl.JOGLRenderer";
 	private String gpName, gpName2;
 	private float time = 0;
 	int crashInc = 0;
@@ -90,7 +90,8 @@ public class MyGame extends BaseGame implements IEventListener{
 			oc1 = new OrbitCamera(p1Camera, p1, im, mName);
 			oc2 = new OrbitCamera(p2Camera, p2, im, gpName);
 			
-		//	super.update(0.0f);
+			FSEMtoggle = false;
+			
 			
 		}
 			
@@ -331,7 +332,6 @@ public class MyGame extends BaseGame implements IEventListener{
 			System.out.println("second controller: " + gpName2);
 			
 			// create keyboard actions
-			MovementToggle movement = new MovementToggle();
 			IAction quitGame = new QuitGameAction(this);
 			IAction moveForwardP1 = new MoveForwardAction(p1); // w kb
 			IAction moveBackwardP1 = new MoveBackwardAction(p1); // s kb
@@ -442,13 +442,13 @@ public class MyGame extends BaseGame implements IEventListener{
 			//	CrashEvent newCrash = new CrashEvent(crashInc);
 			//	em.triggerEvent(newCrash);
 				p1Score++;
-				System.out.println("removing object.");
-		//		removeGameWorldObject(treasures);
+			//	System.out.println("removing object.");
+			//	removeGameWorldObject(treasures);
 			}
 			if (treasures.getWorldBound().equals(p2.getWorldBound()))
 			{
 				p2Score++;
-				System.out.println("removing object.");
+			//	System.out.println("removing object.");
 			//	removeGameWorldObject(treasures);
 			}
 			if (bombs.getWorldBound().equals(p1.getWorldBound()))
@@ -457,7 +457,7 @@ public class MyGame extends BaseGame implements IEventListener{
 			//	CrashEvent newCrash = new CrashEvent(crashInc);
 			//	em.triggerEvent(newCrash);
 				p1Score--;
-				System.out.println("removing object.");
+			//	System.out.println("removing object.");
 			//	removeGameWorldObject(bombs);
 			}
 			if (bombs.getWorldBound().equals(p2.getWorldBound()))
@@ -466,7 +466,7 @@ public class MyGame extends BaseGame implements IEventListener{
 			//	CrashEvent newCrash = new CrashEvent(crashInc);
 			//	em.triggerEvent(newCrash);
 				p2Score--;
-				System.out.println("removing object.");
+			//	System.out.println("removing object.");
 			//	removeGameWorldObject(bombs);
 			}
 			
@@ -480,32 +480,30 @@ public class MyGame extends BaseGame implements IEventListener{
 		super.render();
 	}
 	
-	
-/*	private IDisplaySystem createDisplaySystem()
+	 
+	private IDisplaySystem createDisplaySystem() // notes
 	{
 		
-		IDisplaySystem display = new MyNewDisplaySystem(500, 500, 24, 30, true, "sage.renderer.jogl.JOGL.Renderer");
+		IDisplaySystem display = new MyDisplaySystem(1000, 1000, 24, 30, FSEMtoggle, renderName);
 		
 		System.out.println("waiting for display creation");
-		
-		int c = 0;
-		 while (!display.isCreated())
-		 {
-		 try
-		 { Thread.sleep(10); }
-		 catch (InterruptedException e)
-		 { throw new RuntimeException("Display creation interrupted"); }
-		 c++;
-		 System.out.print("+");
-		 if (c % 80 == 0) { System.out.println(); }
-		 if (c > 2000) // 20 seconds (approx.)
-		 { throw new RuntimeException("Unable to create display");
-		 }
-		 }
+		 
 		 System.out.println();
 		 return display ;
 		 
 	}
 	
-	*/
+	
+	protected void initSystem()
+	{
+		IDisplaySystem d = createDisplaySystem();
+		setDisplaySystem(d);
+		
+		IInputManager input = new InputManager();
+		setInputManager(input);
+		
+		ArrayList<SceneNode> gameWorld = new ArrayList<SceneNode>();
+		setGameWorld(gameWorld);
+	}
+	
 }
