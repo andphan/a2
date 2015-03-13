@@ -21,7 +21,6 @@ before, but also a flat ground plane (e.g. the Y=0 plane) on which reside the tr
 treasure chest, and on which each player manipulates his/her avatar. The game must also
 provide two HUD elements showing relevant game data for each player.
 
-0% - object spawns
 
 
 As before, you are welcome to add features of your own, in addition to the basic requirements,
@@ -103,12 +102,14 @@ use the JOGLRenderer implementation in the creation of your IDisplaySystem)
 
  Your game must run in FSEM (Full-Screen Exclusive Mode), or provide an FSEM option.
 
-0%
+100%
 
  As before, your treasure chest should respond to Events using the SAGE event handler.
 
+50%
 
-0%
+but collision issue.
+
 
 Additional Notes
  In this version of the game there is nothing stopping the player from moving the camera
@@ -119,11 +120,11 @@ that is a step required in initSystem().
 Deliverables
 Submit to SacCT a single ZIP file containing:
 1. your Java source code (.java) files,
-2. the compiled (.class) files for each of your Java source files,
+2. the compiled (.class) files for each of your Java source files, - how to do that
 3. a batch (.bat) file that runs your submission if unzipped as-is onto a lab machine,
 4. a screenshot (.jpg) file showing a typical scene from your game, and
 5. a short “Player’s Guide” document (2-3 pages, preferably PDF), describing:
- how to compile and run your program from a command window,
+ how to compile and run your program from a command window, - how to compile from command window
  how your game works, including how the two-player inputs work,
  how your scoring works,
  where in your program you satisfied each of the requirements,

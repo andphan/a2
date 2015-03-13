@@ -28,10 +28,12 @@ public class MyZRotateController extends Controller {
 		
 		Matrix3D newTrans = new Matrix3D();
 		newTrans.rotateZ(180);
+		newTrans.rotateY(180);
 		for (SceneNode node : controlledNodes)
 		{
 			Matrix3D curTrans = node.getLocalRotation();
 			curTrans.rotateY(180);
+			curTrans.rotateZ(180);
 			node.setLocalRotation(curTrans);
 		}
 	}

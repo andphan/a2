@@ -16,7 +16,6 @@ import graphicslib3D.Point3D;
 import graphicslib3D.Vector3D;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.awt.Color;
 
 
@@ -91,8 +90,8 @@ public class MyGame extends BaseGame implements IEventListener{
 			oc2 = new OrbitCamera(p2Camera, p2, im, gpName);
 			
 			FSEMtoggle = false;
-			
-			
+	
+			super.update((float) 0.0);
 		}
 			
 		public void initGameObjects()
@@ -133,7 +132,7 @@ public class MyGame extends BaseGame implements IEventListener{
 			sphM.translate(Math.random()*150, 0, Math.random()*150);
 			sph.setLocalTranslation(sphM);
 			Matrix3D sphS = sph.getLocalScale();
-			sphS.scale(20, 20, 20);
+			sphS.scale(10, 10, 10);
 			sph.setLocalScale(sphS);
 			sph.setColor(Color.black);
 		//	System.out.println("sph x : " + bx + " sph y : " + by);
@@ -160,8 +159,12 @@ public class MyGame extends BaseGame implements IEventListener{
 			// triMesh treasurechest
 			myT = new myNewTriMesh();
 			Matrix3D myTM = myT.getLocalTranslation();
-			myTM.translate(100, 0, 100);
+			myTM.translate(Math.random()*100, 0, Math.random()*100);
 			myT.setLocalTranslation(myTM);
+			Matrix3D myTS = myT.getLocalScale();
+			myTS.scale(10, 10, 10);
+			myT.setLocalScale(myTS);
+			addGameWorldObject(myT);
 		//	System.out.println("myT x : "  + " myT y : " + dy);
 			myT.updateWorldBound();
 			
@@ -208,6 +211,7 @@ public class MyGame extends BaseGame implements IEventListener{
 			treasures.addChild(cub);
 			treasures.translate(2, 0, 0);
 			addGameWorldObject(treasures);
+			treasures.updateWorldBound();
 			
 			MySpinController msc = new MySpinController();
 			msc.addControlledNode(treasures);
@@ -220,6 +224,7 @@ public class MyGame extends BaseGame implements IEventListener{
 			bombs.addChild(pyrD);
 			bombs.addChild(pyrE);
 			addGameWorldObject(bombs);
+			bombs.updateWorldBound();
 			
 			MyZRotateController mzr = new MyZRotateController();
 			mzr.addControlledNode(bombs);
@@ -247,6 +252,9 @@ public class MyGame extends BaseGame implements IEventListener{
 			timeDisplay.setColor(Color.WHITE);
 			timeDisplay.setLocation(0, 0.025);
 			addGameWorldObject(timeDisplay);
+			
+			
+			em.addListener(myT, CrashEvent.class);
 
 		}
 		
@@ -264,6 +272,7 @@ public class MyGame extends BaseGame implements IEventListener{
 			Matrix3D p1R = new Matrix3D();
 			p1R.rotateY(45.0);
 			p1.setLocalRotation(p1R);
+			p1.updateWorldBound();
 			addGameWorldObject(p1);
 			
 
@@ -271,9 +280,6 @@ public class MyGame extends BaseGame implements IEventListener{
 			p2Camera = new JOGLCamera(renderer);
 			p2Camera.setPerspectiveFrustum(60, 2, 1, 1000);
 			p2Camera.setViewport(0, 1.0, 0.55, 1.00);
-			
-
-				
 			
 			p2 = new Cube("Player 2");
 			p2.translate(0, 0, 0);
@@ -284,6 +290,7 @@ public class MyGame extends BaseGame implements IEventListener{
 			Matrix3D p2R = new Matrix3D();
 			p2R.rotateY(45.0);
 			p2.setLocalRotation(p2R);
+			p2.updateWorldBound();
 			addGameWorldObject(p2);
 			
 			createHUD();
@@ -303,9 +310,9 @@ public class MyGame extends BaseGame implements IEventListener{
 		p1Camera.addToHUD(p1ID);
 		p1ScoreString = new HUDString("P1 Score: ");
 		p1ScoreString.setName("Player1IDScore");
-		p1ScoreString.setLocation(0.05, 0.08);
+		p1ScoreString.setLocation(0.01, 0.1);
 		p1ScoreString.setRenderMode(sage.scene.SceneNode.RENDER_MODE.OPAQUE);
-		
+		p1Camera.addToHUD(p1ScoreString);
 		
 		
 		p2ID = new HUDString("Player 2");
@@ -317,8 +324,9 @@ public class MyGame extends BaseGame implements IEventListener{
 		p2Camera.addToHUD(p2ID);
 		p2ScoreString = new HUDString("P2 Score: ");
 		p2ScoreString.setName("Player2IDScore");
-		p2ScoreString.setLocation(0.05, 0.08);
+		p2ScoreString.setLocation(0.01, 0.1);
 		p2ScoreString.setRenderMode(sage.scene.SceneNode.RENDER_MODE.OPAQUE);
+		p2Camera.addToHUD(p2ScoreString);
 		
 		}
 		public void initInputs()
@@ -412,9 +420,6 @@ public class MyGame extends BaseGame implements IEventListener{
 		//	im.associateAction(gpName, net.java.games.input.Component.Identifier.Axis.Y, controllerY,
 		//			IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
 			
-			
-			
-			
 		}
 		public void update(float elapsedTimeMS)
 		{
@@ -431,45 +436,35 @@ public class MyGame extends BaseGame implements IEventListener{
 			p2ScoreString.setText("P2 Score = " + p2Score);
 			
 			time += elapsedTimeMS;
-		
 			
 			timeDisplay.setText("Time = " + (time/1000));
 
 			// collision 
-			if (treasures.getWorldBound().intersects(p1.getWorldBound()))
+			if (treasures.getWorldBound() == p1.getWorldBound())  // this is the issue here
 			{
-			//	crashInc++;
-			//	CrashEvent newCrash = new CrashEvent(crashInc);
-			//	em.triggerEvent(newCrash);
+				crashInc++;
+				CrashEvent newCrash = new CrashEvent(crashInc);
+				em.triggerEvent(newCrash);
 				p1Score++;
-			//	System.out.println("removing object.");
-			//	removeGameWorldObject(treasures);
+				System.out.println("hit object");
 			}
 			if (treasures.getWorldBound().equals(p2.getWorldBound()))
 			{
+				crashInc++;
+				CrashEvent newCrash = new CrashEvent(crashInc);
+				em.triggerEvent(newCrash);
 				p2Score++;
-			//	System.out.println("removing object.");
-			//	removeGameWorldObject(treasures);
+
 			}
 			if (bombs.getWorldBound().equals(p1.getWorldBound()))
 			{
-			//	crashInc++;
-			//	CrashEvent newCrash = new CrashEvent(crashInc);
-			//	em.triggerEvent(newCrash);
 				p1Score--;
-			//	System.out.println("removing object.");
-			//	removeGameWorldObject(bombs);
+
 			}
 			if (bombs.getWorldBound().equals(p2.getWorldBound()))
 			{
-			//	crashInc++;
-			//	CrashEvent newCrash = new CrashEvent(crashInc);
-			//	em.triggerEvent(newCrash);
 				p2Score--;
-			//	System.out.println("removing object.");
-			//	removeGameWorldObject(bombs);
 			}
-			
 	
 		}
 	protected void render()
@@ -489,8 +484,7 @@ public class MyGame extends BaseGame implements IEventListener{
 		System.out.println("waiting for display creation");
 		 
 		 System.out.println();
-		 return display ;
-		 
+		 return display;
 	}
 	
 	

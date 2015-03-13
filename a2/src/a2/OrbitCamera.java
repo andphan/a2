@@ -44,6 +44,10 @@ public class OrbitCamera {
 		updateCameraPos();
 		camera.lookAt(avatarPosition, worldUpVec);
 	}
+	public Point3D returnTargetPos()
+	{
+		return new Point3D(target.getWorldTranslation().getCol(3));
+	}
 	private void updateTarget()
 	{
 		avatarPosition = new Point3D(target.getWorldTranslation().getCol(3));
