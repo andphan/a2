@@ -58,6 +58,7 @@ public class MyGame extends BaseGame implements IEventListener{
 	private IRenderer renderer;
 	private HUDString timeDisplay;
 	private HUDString p1ID, p2ID;
+	private HUDString p1ScoreString, p2ScoreString;
 	private String kbName, mName;
 	private String gpName, gpName2;
 	private float time = 0;
@@ -100,41 +101,16 @@ public class MyGame extends BaseGame implements IEventListener{
 			
 			
 			// 	create new objects by using scale()
-			Random rng = new Random();
-			// floats for objects
-			float ax = rng.nextFloat();
-			float ay = rng.nextFloat();
-			float bx = rng.nextFloat();
-			float by = rng.nextFloat();
-			float cx = rng.nextFloat();
-			float cy = rng.nextFloat();
-			float dx = rng.nextFloat();
-			float dy = rng.nextFloat();
-			float ex = rng.nextFloat();
-			float ey = rng.nextFloat();
-			
-			// floats for bombs
-			float fx = rng.nextFloat();
-			float fz = rng.nextFloat();
-			float hx = rng.nextFloat();
-			float hz = rng.nextFloat();
-			float ix = rng.nextFloat();
-			float iz = rng.nextFloat();
-			float jx = rng.nextFloat();
-			float jz = rng.nextFloat();
-			float kx = rng.nextFloat();
-			float kz = rng.nextFloat();
-			
 		
 			// plane
 			theGround = new Rectangle();
 			Matrix3D theGroundM = theGround.getLocalTranslation();
-			theGroundM.translate(50, 50, 50);
+			theGroundM.translate(0, 0, 0);
 			theGround.setLocalTranslation(theGroundM);
-			theGround.setColor(Color.orange);
-			theGround.scale(200, 200, 200);
+			theGround.setColor(Color.LIGHT_GRAY);
+			theGround.scale(1000, 1000, 0);
 			Matrix3D theGR = new Matrix3D();
-			theGR.rotateY(45.0);
+			theGR.rotateX(90.0);
 			theGround.setLocalRotation(theGR);
 			
 			addGameWorldObject(theGround);
@@ -142,74 +118,82 @@ public class MyGame extends BaseGame implements IEventListener{
 			// treasures
 			rect1 = new Rectangle();
 			Matrix3D rectM = rect1.getLocalTranslation();
-			rectM.translate(ax, 0, ay);
+			rectM.translate(Math.random()*150, 0, Math.random()*150);
 			rect1.setLocalTranslation(rectM);
-			System.out.println("rect x : " + ax + " rect y : " + ay);
+			Matrix3D rectS = rect1.getLocalScale();
+			rectS.scale(10, 10, 10);
+			rect1.setLocalScale(rectS);
+		//	System.out.println("rect x : " + ax + " rect y : " + ay);
 			rect1.updateWorldBound();
 
 			
 			sph = new Sphere();
 			Matrix3D sphM = sph.getLocalTranslation();
-			sphM.translate(bx, 0, by);
+			sphM.translate(Math.random()*150, 0, Math.random()*150);
 			sph.setLocalTranslation(sphM);
-			System.out.println("sph x : " + bx + " sph y : " + by);
+			Matrix3D sphS = sph.getLocalScale();
+			sphS.scale(20, 20, 20);
+			sph.setLocalScale(sphS);
+			sph.setColor(Color.black);
+		//	System.out.println("sph x : " + bx + " sph y : " + by);
 			sph.updateWorldBound();
 
 			
 			cyl = new Cylinder();
 			Matrix3D cylM = cyl.getLocalTranslation();
-			cylM.translate(cx, 0, cy);
+			cylM.translate(Math.random()*150, 0, Math.random()*150);
 			cyl.setLocalTranslation(cylM);
-			System.out.println("cyl x : " + cx + " cyl y : " + cy);
+			cyl.setColor(Color.black);
+		//	System.out.println("cyl x : " + cx + " cyl y : " + cy);
 			cyl.updateWorldBound();
 
 			
 			cub = new Cube();
 			Matrix3D cubM = cub.getLocalTranslation();
-			cubM.translate(ex, 0, ey);
+			cubM.translate(Math.random()*150, 0, Math.random()*150);
 			cub.setLocalTranslation(cubM);
-			System.out.println("cub x : " + ex + " cub y : " + ey);
+		//	System.out.println("cub x : " + ex + " cub y : " + ey);
 			cub.updateWorldBound();
 			
 		
 			// triMesh treasurechest
 			myT = new myNewTriMesh();
 			Matrix3D myTM = myT.getLocalTranslation();
-			myTM.translate(0, 0, 0);
+			myTM.translate(100, 0, 100);
 			myT.setLocalTranslation(myTM);
-			System.out.println("myT x : "  + " myT y : " + dy);
+		//	System.out.println("myT x : "  + " myT y : " + dy);
 			myT.updateWorldBound();
 			
 			
 			// bomb creation
 			pyrA = new Pyramid();
 			Matrix3D pyrAM = pyrA.getLocalTranslation();
-			pyrAM.translate(fx, 0, fz);
+			pyrAM.translate(Math.random()*150, 0, Math.random()*150);
 			pyrA.setLocalTranslation(pyrAM);
 			pyrA.updateWorldBound();
 			
 			pyrB = new Pyramid();
 			Matrix3D pyrBM = pyrB.getLocalTranslation();
-			pyrBM.translate(hx, 0, hz);
+			pyrBM.translate(Math.random()*150, 0, Math.random()*150);
 			pyrB.setLocalTranslation(pyrBM);
 			pyrB.updateWorldBound();
 			
 			pyrC = new Pyramid();
 			Matrix3D pyrCM = pyrC.getLocalTranslation();
-			pyrCM.translate(ix, 0, iz);
+			pyrCM.translate(Math.random()*150, 0, Math.random()*150);
 			pyrC.setLocalTranslation(pyrCM);
 			pyrC.updateWorldBound();
 			
 			pyrD = new Pyramid();
 			Matrix3D pyrDM = pyrD.getLocalTranslation();
-			pyrDM.translate(jx, 0, jz);
+			pyrDM.translate(Math.random()*150, 0, Math.random()*150);
 			pyrD.setLocalTranslation(pyrDM);
 			pyrD.updateWorldBound();
 			
 			
 			pyrE = new Pyramid();
 			Matrix3D pyrEM = pyrE.getLocalTranslation();
-			pyrEM.translate(kx, 0, kz);
+			pyrEM.translate(Math.random()*150, 0, Math.random()*150);
 			pyrE.setLocalTranslation(pyrEM);
 			pyrE.updateWorldBound();
 			
@@ -316,6 +300,12 @@ public class MyGame extends BaseGame implements IEventListener{
 		p1ID.setColor(Color.orange);
 		p1ID.setCullMode(sage.scene.SceneNode.CULL_MODE.NEVER);
 		p1Camera.addToHUD(p1ID);
+		p1ScoreString = new HUDString("P1 Score: ");
+		p1ScoreString.setName("Player1IDScore");
+		p1ScoreString.setLocation(0.05, 0.08);
+		p1ScoreString.setRenderMode(sage.scene.SceneNode.RENDER_MODE.OPAQUE);
+		
+		
 		
 		p2ID = new HUDString("Player 2");
 		p2ID.setName("Player2ID");
@@ -324,6 +314,11 @@ public class MyGame extends BaseGame implements IEventListener{
 		p2ID.setColor(Color.green);
 		p2ID.setCullMode(sage.scene.SceneNode.CULL_MODE.NEVER);
 		p2Camera.addToHUD(p2ID);
+		p2ScoreString = new HUDString("P2 Score: ");
+		p2ScoreString.setName("Player2IDScore");
+		p2ScoreString.setLocation(0.05, 0.08);
+		p2ScoreString.setRenderMode(sage.scene.SceneNode.RENDER_MODE.OPAQUE);
+		
 		}
 		public void initInputs()
 		{
@@ -432,8 +427,8 @@ public class MyGame extends BaseGame implements IEventListener{
 
 			// overwritten
 			// update score
-			p1ID.setText("P1 Score = " + p1Score);
-			p2ID.setText("P2 Score = " + p2Score);
+			p1ScoreString.setText("P1 Score = " + p1Score);
+			p2ScoreString.setText("P2 Score = " + p2Score);
 			
 			time += elapsedTimeMS;
 		
@@ -441,47 +436,40 @@ public class MyGame extends BaseGame implements IEventListener{
 			timeDisplay.setText("Time = " + (time/1000));
 
 			// collision 
-/*			if (rect1.getWorldBound().contains(camera.getLocation()))
+			if (treasures.getWorldBound().intersects(p1.getWorldBound()))
 			{
-				crashInc++;
-				CrashEvent newCrash = new CrashEvent(crashInc);
-				em.triggerEvent(newCrash);
-				System.out.println("rectangle hit");
-				score++;
-				System.out.println("removing rectangle object.");
-				removeGameWorldObject(rect1);
+			//	crashInc++;
+			//	CrashEvent newCrash = new CrashEvent(crashInc);
+			//	em.triggerEvent(newCrash);
+				p1Score++;
+				System.out.println("removing object.");
+		//		removeGameWorldObject(treasures);
 			}
-			if (sph.getWorldBound().contains(camera.getLocation()))
+			if (treasures.getWorldBound().equals(p2.getWorldBound()))
 			{
-				crashInc++;
-				CrashEvent newCrash = new CrashEvent(crashInc);
-				em.triggerEvent(newCrash);
-				System.out.println("sphere hit");
-				score++;
-				System.out.println("removing sphere object.");
-				removeGameWorldObject(sph);
+				p2Score++;
+				System.out.println("removing object.");
+			//	removeGameWorldObject(treasures);
 			}
-			if (cyl.getWorldBound().contains(camera.getLocation()))
+			if (bombs.getWorldBound().equals(p1.getWorldBound()))
 			{
-				crashInc++;
-				CrashEvent newCrash = new CrashEvent(crashInc);
-				em.triggerEvent(newCrash);
-				System.out.println("cylinder hit");
-				score++;
-				System.out.println("removing cylinder object.");
-				removeGameWorldObject(cyl);
+			//	crashInc++;
+			//	CrashEvent newCrash = new CrashEvent(crashInc);
+			//	em.triggerEvent(newCrash);
+				p1Score--;
+				System.out.println("removing object.");
+			//	removeGameWorldObject(bombs);
 			}
-			if (cub.getWorldBound().contains(camera.getLocation()))
+			if (bombs.getWorldBound().equals(p2.getWorldBound()))
 			{
-				crashInc++;
-				CrashEvent newCrash = new CrashEvent(crashInc);
-				em.triggerEvent(newCrash);
-				System.out.println("cube hit");
-				score++;
-				System.out.println("removing rectangle object.");
-				removeGameWorldObject(cub);
+			//	crashInc++;
+			//	CrashEvent newCrash = new CrashEvent(crashInc);
+			//	em.triggerEvent(newCrash);
+				p2Score--;
+				System.out.println("removing object.");
+			//	removeGameWorldObject(bombs);
 			}
-			*/
+			
 	
 		}
 	protected void render()
@@ -493,12 +481,31 @@ public class MyGame extends BaseGame implements IEventListener{
 	}
 	
 	
-	private IDisplaySystem createDisplaySystem()
+/*	private IDisplaySystem createDisplaySystem()
 	{
 		
 		IDisplaySystem display = new MyNewDisplaySystem(500, 500, 24, 30, true, "sage.renderer.jogl.JOGL.Renderer");
 		
-		return display;
+		System.out.println("waiting for display creation");
+		
+		int c = 0;
+		 while (!display.isCreated())
+		 {
+		 try
+		 { Thread.sleep(10); }
+		 catch (InterruptedException e)
+		 { throw new RuntimeException("Display creation interrupted"); }
+		 c++;
+		 System.out.print("+");
+		 if (c % 80 == 0) { System.out.println(); }
+		 if (c > 2000) // 20 seconds (approx.)
+		 { throw new RuntimeException("Unable to create display");
+		 }
+		 }
+		 System.out.println();
+		 return display ;
+		 
 	}
 	
+	*/
 }
