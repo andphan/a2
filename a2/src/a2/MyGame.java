@@ -445,7 +445,7 @@ public class MyGame extends BaseGame implements IEventListener{
 				CrashEvent newCrash = new CrashEvent(crashInc);
 				em.triggerEvent(newCrash);
 				p1Score++;
-				System.out.println("hit object");
+	//			System.out.println("hit object");
 			}
 			if (sph.getWorldBound().contains(oc1.returnTargetPos()))  // this is the issue here
 			{
@@ -453,7 +453,7 @@ public class MyGame extends BaseGame implements IEventListener{
 				CrashEvent newCrash = new CrashEvent(crashInc);
 				em.triggerEvent(newCrash);
 				p1Score++;
-				System.out.println("hit object");
+	//			System.out.println("hit object");
 			}
 			if (cub.getWorldBound().contains(oc1.returnTargetPos()))  // this is the issue here
 			{
@@ -461,7 +461,7 @@ public class MyGame extends BaseGame implements IEventListener{
 				CrashEvent newCrash = new CrashEvent(crashInc);
 				em.triggerEvent(newCrash);
 				p1Score++;
-				System.out.println("hit object");
+		//		System.out.println("hit object");
 			}
 			if (cyl.getWorldBound().contains(oc1.returnTargetPos()))  // this is the issue here
 			{
@@ -469,7 +469,7 @@ public class MyGame extends BaseGame implements IEventListener{
 				CrashEvent newCrash = new CrashEvent(crashInc);
 				em.triggerEvent(newCrash);
 				p1Score++;
-				System.out.println("hit object");
+		//		System.out.println("hit object");
 			}
 			if (rect1.getWorldBound().contains(oc2.returnTargetPos()))  // this is the issue here
 			{
@@ -477,7 +477,7 @@ public class MyGame extends BaseGame implements IEventListener{
 				CrashEvent newCrash = new CrashEvent(crashInc);
 				em.triggerEvent(newCrash);
 				p2Score++;
-				System.out.println("hit object");
+		//		System.out.println("hit object");
 			}
 			if (sph.getWorldBound().contains(oc2.returnTargetPos()))  // this is the issue here
 			{
@@ -485,7 +485,7 @@ public class MyGame extends BaseGame implements IEventListener{
 				CrashEvent newCrash = new CrashEvent(crashInc);
 				em.triggerEvent(newCrash);
 				p2Score++;
-				System.out.println("hit object");
+		//		System.out.println("hit object");
 			}
 			if (cub.getWorldBound().contains(oc2.returnTargetPos()))  // this is the issue here
 			{
@@ -493,7 +493,7 @@ public class MyGame extends BaseGame implements IEventListener{
 				CrashEvent newCrash = new CrashEvent(crashInc);
 				em.triggerEvent(newCrash);
 				p2Score++;
-				System.out.println("hit object");
+		//		System.out.println("hit object");
 			}
 			if (cyl.getWorldBound().contains(oc2.returnTargetPos()))  // this is the issue here
 			{
@@ -501,7 +501,7 @@ public class MyGame extends BaseGame implements IEventListener{
 				CrashEvent newCrash = new CrashEvent(crashInc);
 				em.triggerEvent(newCrash);
 				p2Score++;
-				System.out.println("hit object");
+		//		System.out.println("hit object");
 			}
 			if (pyrA.getWorldBound().equals(oc1.returnTargetPos()))
 			{
