@@ -9,7 +9,6 @@ import sage.input.action.AbstractInputAction;
 public class RotateUpCamera extends AbstractInputAction {
 
 	private ICamera camera;
-	private MovementToggle m;
 	public RotateUpCamera(ICamera c)
 	{
 		camera = c;
@@ -26,8 +25,6 @@ public class RotateUpCamera extends AbstractInputAction {
 				
 		// set to new vector
 		double dx = newLoc.getX();
-		double dy = newLoc.getY();
-		double dz = newLoc.getZ();
 		Point3D newPoint = new Point3D(dx, curLoc.getY(), curLoc.getY());
 		camera.setLocation(newPoint);
 		

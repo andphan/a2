@@ -27,8 +27,6 @@ public class RotateDownCamera extends AbstractInputAction {
 				
 		// set to new vector
 		double dx = newLoc.getX();
-		double dy = newLoc.getY();
-		double dz = newLoc.getZ();
 		Point3D newPoint = new Point3D(dx, curLoc.getY(), curLoc.getY());
 		camera.setLocation(newPoint);
 		

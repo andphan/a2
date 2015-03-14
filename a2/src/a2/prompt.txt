@@ -40,13 +40,11 @@ direction (implementing a spring system would require you to do some additional 
 with their own view of the (same) world which changes as they move their cameras.
 
 
-50% with prof code 
-
-need to make the objects move.
+100%
 
  Provide HUDs for each player, each displaying data relevant only to that player.
 
-100% with prof code
+100%
 
 
 
@@ -106,10 +104,7 @@ use the JOGLRenderer implementation in the creation of your IDisplaySystem)
 
  As before, your treasure chest should respond to Events using the SAGE event handler.
 
-50%
-
-but collision issue.
-
+100%
 
 Additional Notes
  In this version of the game there is nothing stopping the player from moving the camera

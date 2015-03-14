@@ -9,7 +9,6 @@ import sage.input.action.AbstractInputAction;
 public class RightCameraMovement extends AbstractInputAction {
 
 	private ICamera camera;
-	private MovementToggle m;
 	public RightCameraMovement(ICamera c)
 	{
 		camera = c;

@@ -9,7 +9,6 @@ import sage.input.action.AbstractInputAction;
 public class RotateLeftCamera extends AbstractInputAction {
 
 	private ICamera camera;
-	private MovementToggle m;
 	public RotateLeftCamera(ICamera c)
 	{
 		camera = c;
@@ -25,9 +24,7 @@ public class RotateLeftCamera extends AbstractInputAction {
 		Vector3D newLoc = curLoc.add(viewDir);
 				
 		// set to new vector
-		double dx = newLoc.getX();
 		double dy = newLoc.getY();
-		double dz = newLoc.getZ();
 		Point3D newPoint = new Point3D(curLoc.getX(), dy, curLoc.getZ());
 		camera.setLocation(newPoint);
 		

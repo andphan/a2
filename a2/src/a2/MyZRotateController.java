@@ -6,11 +6,9 @@ import graphicslib3D.Matrix3D;
 
 public class MyZRotateController extends Controller {
 
-	private double rate = .002;
 	private double cycle = 2000.0;
 	private double time;
-	private double direction = 1.0;
-	
+
 	public void setTime(double n)
 	{
 		cycle = n;

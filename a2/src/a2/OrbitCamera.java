@@ -1,7 +1,6 @@
 package a2;
 
 import net.java.games.input.Component.Identifier.Axis;
-import a2.MyGame;
 import net.java.games.input.Event;
 import graphicslib3D.Point3D;
 import graphicslib3D.Vector3D;

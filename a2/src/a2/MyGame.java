@@ -47,8 +47,6 @@ public class MyGame extends BaseGame implements IEventListener{
 	ICamera camera;
 	IInputManager im;
 	IEventManager em;
-	private int numHit;
-	private int fsemFlag = 0;
 	private int p1Score = 0;
 	private int p2Score = 0;
 	private SceneNode p1, p2;
@@ -74,6 +72,8 @@ public class MyGame extends BaseGame implements IEventListener{
  *  3-9-15 - plane needs to be fixed
  *  3-10-15 - going to try treasures - need to change up to do rotate/spin
  *  								 - need to add another group ... trees or rocks?
+ *  3-13-15 
+ *  	fix event handler
  */
 	
 		public void initGame() // override
@@ -365,16 +365,15 @@ public class MyGame extends BaseGame implements IEventListener{
 			IAction controllerRX = new RXAxisMovement(camera, 0.01f);
 			IAction controllerRY = new RYAxisMovement(camera, 0.01f);
 		*/
-			/* figure out why laptop cannot run with im.associateAction */
 			
 			// Associate actions with keyboard  PLAYER 1
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.W, moveForwardP1, // do two controllers instead
+			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.W, moveForwardP1, 
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.S, moveBackwardP1, // do two controllers instead
+			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.S, moveBackwardP1, 
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.A, moveLeftP1, // do two controllers instead
+			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.A, moveLeftP1, 
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.D, moveRightP1, // do two controllers instead
+			im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.D, moveRightP1, 
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
 		/*	im.associateAction(kbName, net.java.games.input.Component.Identifier.Key.S, moveBackward, 
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);			
@@ -397,9 +396,9 @@ public class MyGame extends BaseGame implements IEventListener{
 			
 			
 			// associate actions with controllers PLAYER 2
-			im.associateAction(gpName, net.java.games.input.Component.Identifier.Button._3, moveBackwardP2,
+			im.associateAction(gpName, net.java.games.input.Component.Identifier.Button._0, moveBackwardP2,
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
-			im.associateAction(gpName, net.java.games.input.Component.Identifier.Button._0, moveForwardP2,
+			im.associateAction(gpName, net.java.games.input.Component.Identifier.Button._3, moveForwardP2,
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
 			im.associateAction(gpName, net.java.games.input.Component.Identifier.Button._1, moveRightP2,
 					IInputManager.INPUT_ACTION_TYPE.REPEAT_WHILE_DOWN);
@@ -440,7 +439,7 @@ public class MyGame extends BaseGame implements IEventListener{
 			timeDisplay.setText("Time = " + (time/1000));
 
 			// collision 
-			if (treasures.getWorldBound() == p1.getWorldBound())  // this is the issue here
+			if (rect1.getWorldBound().contains(oc1.returnTargetPos()))  // this is the issue here
 			{
 				crashInc++;
 				CrashEvent newCrash = new CrashEvent(crashInc);
@@ -448,22 +447,111 @@ public class MyGame extends BaseGame implements IEventListener{
 				p1Score++;
 				System.out.println("hit object");
 			}
-			if (treasures.getWorldBound().equals(p2.getWorldBound()))
+			if (sph.getWorldBound().contains(oc1.returnTargetPos()))  // this is the issue here
+			{
+				crashInc++;
+				CrashEvent newCrash = new CrashEvent(crashInc);
+				em.triggerEvent(newCrash);
+				p1Score++;
+				System.out.println("hit object");
+			}
+			if (cub.getWorldBound().contains(oc1.returnTargetPos()))  // this is the issue here
+			{
+				crashInc++;
+				CrashEvent newCrash = new CrashEvent(crashInc);
+				em.triggerEvent(newCrash);
+				p1Score++;
+				System.out.println("hit object");
+			}
+			if (cyl.getWorldBound().contains(oc1.returnTargetPos()))  // this is the issue here
+			{
+				crashInc++;
+				CrashEvent newCrash = new CrashEvent(crashInc);
+				em.triggerEvent(newCrash);
+				p1Score++;
+				System.out.println("hit object");
+			}
+			if (rect1.getWorldBound().contains(oc2.returnTargetPos()))  // this is the issue here
 			{
 				crashInc++;
 				CrashEvent newCrash = new CrashEvent(crashInc);
 				em.triggerEvent(newCrash);
 				p2Score++;
-
+				System.out.println("hit object");
 			}
-			if (bombs.getWorldBound().equals(p1.getWorldBound()))
+			if (sph.getWorldBound().contains(oc2.returnTargetPos()))  // this is the issue here
+			{
+				crashInc++;
+				CrashEvent newCrash = new CrashEvent(crashInc);
+				em.triggerEvent(newCrash);
+				p2Score++;
+				System.out.println("hit object");
+			}
+			if (cub.getWorldBound().contains(oc2.returnTargetPos()))  // this is the issue here
+			{
+				crashInc++;
+				CrashEvent newCrash = new CrashEvent(crashInc);
+				em.triggerEvent(newCrash);
+				p2Score++;
+				System.out.println("hit object");
+			}
+			if (cyl.getWorldBound().contains(oc2.returnTargetPos()))  // this is the issue here
+			{
+				crashInc++;
+				CrashEvent newCrash = new CrashEvent(crashInc);
+				em.triggerEvent(newCrash);
+				p2Score++;
+				System.out.println("hit object");
+			}
+			if (pyrA.getWorldBound().equals(oc1.returnTargetPos()))
 			{
 				p1Score--;
 
 			}
-			if (bombs.getWorldBound().equals(p2.getWorldBound()))
+			if (pyrB.getWorldBound().equals(oc1.returnTargetPos()))
+			{
+				p1Score--;
+
+			}
+			if (pyrC.getWorldBound().equals(oc1.returnTargetPos()))
+			{
+				p1Score--;
+
+			}
+			if (pyrD.getWorldBound().equals(oc1.returnTargetPos()))
+			{
+				p1Score--;
+
+			}
+			if (pyrE.getWorldBound().equals(oc1.returnTargetPos()))
+			{
+				p1Score--;
+
+			}
+			if (pyrA.getWorldBound().equals(oc2.returnTargetPos()))
 			{
 				p2Score--;
+
+			}
+			if (pyrB.getWorldBound().equals(oc2.returnTargetPos()))
+			{
+				p2Score--;
+
+			}
+			if (pyrC.getWorldBound().equals(oc2.returnTargetPos()))
+			{
+				p2Score--;
+
+			}
+			if (pyrD.getWorldBound().equals(oc2.returnTargetPos()))
+			{
+				p2Score--;
+
+			}
+			if (pyrE.getWorldBound().equals(oc2.returnTargetPos()))
+			{
+				p2Score--;
+
 			}
 	
 		}
